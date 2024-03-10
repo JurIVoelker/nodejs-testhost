@@ -413,7 +413,14 @@ class PageModify {
   static getNextImages(imgCount) {
     let displayCount = 15;
     return new Promise((resolve, reject) => {
-      let filePath = (__dirname, "..", "public", "pages", "galerie", "images");
+      let filePath = path.join(
+        __dirname,
+        "..",
+        "public",
+        "pages",
+        "galerie",
+        "images"
+      );
       let imageNames = [];
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
         if (!err) {

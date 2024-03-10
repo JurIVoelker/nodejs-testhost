@@ -11,7 +11,6 @@ const TTC = require("../scripts/TTC.js");
 const fs = require("fs");
 
 // Create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(express.static("public"));
 const logger = require("morgan");
 app.use(logger("dev"));
