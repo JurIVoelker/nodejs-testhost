@@ -165,7 +165,8 @@ app.post("/api/navigation/:id", (req, res) => {
  **/
 app.post("/api/login", (req, res) => {
   // API request for loading other pages
-  let password = req.body.password;
+  //let password = req.body.password;
+  console.log(req.body);
 
   if (password == "pass123") {
     res.json({ content: "Login erfolgreich", isLoggedin: "true" }); // Else: return HTML content to index.ejs
