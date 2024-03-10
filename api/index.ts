@@ -17,13 +17,14 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
+  throw new Error(__dirname);
+
   // Path when startpage is called
   const queryParam = req.query.page;
   const filePath =
     queryParam == undefined ? "start/start.html" : queryParam + ".html"; // File path to start page
 
   PageModify.loadPage(filePath, (err, data) => {
-    console.log(__dirname);
     // Call PageModify module (/server/scripts/pageModify.js)
     if (err) {
       res.render("index", {
