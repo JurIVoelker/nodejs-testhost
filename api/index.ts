@@ -30,8 +30,7 @@ app.get("/", (req, res) => {
       });
     } // If reading HTML file was not successful, throw error
     else {
-      //res.render("index", { content: data });
-      res.send("<h1>test</h1>");
+      res.render("index", { content: data });
     } // Else: return HTML content to index.ejs
   });
 });
