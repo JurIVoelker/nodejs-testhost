@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
     queryParam == undefined ? "start/start.html" : queryParam + ".html"; // File path to start page
 
   PageModify.loadPage(filePath, (err, data) => {
+    console.log(__dirname);
     // Call PageModify module (/server/scripts/pageModify.js)
     if (err) {
       res.render("index", {
