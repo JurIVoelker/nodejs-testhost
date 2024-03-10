@@ -17,6 +17,8 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "components", "home.htm"));
+  /*
   // Path when startpage is called
   const queryParam = req.query.page;
   const filePath =
@@ -33,7 +35,7 @@ app.get("/", (req, res) => {
       //res.render("index", { content: data });
       res.send("<h1>test</h1>");
     } // Else: return HTML content to index.ejs
-  });
+  });*/
 });
 
 /**
