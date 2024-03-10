@@ -198,7 +198,11 @@ class TTC {
   static saveJSON(res, fileName) {
     const time = new Date().getTime();
     const json = { validUntil: time, games: res };
-    fs.writeFileSync("./scripts/" + fileName, JSON.stringify(json));
+
+    fs.writeFileSync(
+      path.join(__dirname, "..", "scripts") + "/" + fileName,
+      JSON.stringify(json)
+    );
   }
 }
 
