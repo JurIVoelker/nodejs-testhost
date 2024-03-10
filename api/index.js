@@ -213,7 +213,7 @@ app.get("/api/nextGames/:count", (req, res) => {
       TTC.fetchHTML(externeURL).then((data) => {
         TTC.nextGamesInfo(data, count)
           .then((r) => {
-            TTC.saveJSON(r, "games.json");
+            //TTC.saveJSON(r, "games.json");
             res.json(r);
           })
           .catch((err) => {
