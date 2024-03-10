@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 class PageModify {
   static loadPage(filePath, callback) {
