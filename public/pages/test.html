@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>.container {
+    position: relative;
+    width: 100%; /* Oder eine andere Breite nach Bedarf */
+    height: auto; /* Oder eine feste Höhe nach Bedarf */
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Text am unteren Rand ausrichten */
+  }
+
+  .gradient {
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7));
+    height: 100%;
+  }
+
+  .text {
+    color: white;
+    text-align: center;
+    padding: 20px; /* Platz für den Text */
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="image-container">
+    <div class="image"></div>
+  </div>
+  <div class="overlay">
+    <div class="gradient"></div>
+    <div class="text">Ihr Text hier</div>
+  </div>
+</div>
+
+</body>
+</html>

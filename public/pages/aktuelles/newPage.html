@@ -1,0 +1,22 @@
+<div id="articleContainer">
+    <div id="articleTextContent">
+        <input id="articleTitle" type="text" placeholder="Titel hinzufügen...">
+        <textarea id="articleContent" placeholder="Text hinzufügen..." cols="40" rows="8"></textarea>
+    </div>
+    <div id="articleOtherInformation">
+        <input id="articleDate" type="date">
+        <div id="addPhotos" onclick="Client.triggerFileInput()" >
+            <div id="uploadIcon">
+                <img src='images/icons/upload.svg' alt='Upload icon'>
+                <p>Fotos hochladen</p>
+            </div>
+        </div>
+        <input id="imgUploadInput" type="file" multiple value="" name="image" onchange="Client.displaySelectedFiles()">
+    </div>
+</div>
+
+<div id="articleButtons">
+    <input id="cancelNewArticle" type="button" value="Abbrechen" onclick="Client.returnToArticles()">
+    <input id="sendNewArticle" type="button" value="Fertig" onclick="Server.newPage()">
+</div>
+
