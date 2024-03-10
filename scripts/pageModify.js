@@ -2,7 +2,7 @@ const fs = require("fs");
 
 class PageModify {
   static loadPage(filePath, callback) {
-    let filePath = path.join(
+    filePath = path.join(
       __dirname,
       "..",
       "public",
