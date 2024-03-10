@@ -13,6 +13,8 @@ const fs = require("fs");
 // Create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(express.static("public"));
+const logger = require("morgan");
+app.use(logger("dev"));
 
 app.get("/", (req, res) => {
   // Path when startpage is called
@@ -198,7 +200,9 @@ app.get("/api/nextGames/:count", (req, res) => {
 
   let data;
   try {
-    data = JSON.parse(fs.readFileSync("../server/scripts/games.json"));
+    data = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "..", "scripts") + "/games.json")
+    );
   } catch (e) {
     data = null;
   }
@@ -218,6 +222,7 @@ app.get("/api/nextGames/:count", (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 });
@@ -232,7 +237,9 @@ app.get("/api/allGames/", (req, res) => {
 
   let data;
   try {
-    data = JSON.parse(fs.readFileSync("../server/scripts/allGames.json"));
+    data = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "..", "scripts") + "/allGames.json")
+    );
   } catch (e) {
     data = null;
   }

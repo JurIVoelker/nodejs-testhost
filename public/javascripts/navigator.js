@@ -140,20 +140,23 @@ class Server {
     }
 
     Server.loadNextGames(4, function (data) {
-      let contentHTML =
-        "<h1 style='margin-bottom: 30px'>Unsere nächsten Spiele:</h1>" +
-        "<table><tr class='bigRow'><td><h3>Heimmannschaft</h3></td><td><h3>Uhrzeit und Datum</h3></td><td><h3>Gastmannschaft</h3></td><td><h3>Liga</h3></td></tr>";
-      data.forEach((element) => {
-        contentHTML += getNextGamesHTML(element);
-      });
-      contentHTML += "</table>";
+      console.log(data);
+      if (data) {
+        let contentHTML =
+          "<h1 style='margin-bottom: 30px'>Unsere nächsten Spiele:</h1>" +
+          "<table><tr class='bigRow'><td><h3>Heimmannschaft</h3></td><td><h3>Uhrzeit und Datum</h3></td><td><h3>Gastmannschaft</h3></td><td><h3>Liga</h3></td></tr>";
+        data.forEach((element) => {
+          contentHTML += getNextGamesHTML(element);
+        });
+        contentHTML += "</table>";
 
-      document.getElementById("nextGamesData").value = contentHTML;
+        document.getElementById("nextGamesData").value = contentHTML;
 
-      if (Client.getCurrentPage() === "start/start") {
-        let nextGames = document.getElementById("nextGames");
-        if (nextGames != null) {
-          nextGames.innerHTML = contentHTML;
+        if (Client.getCurrentPage() === "start/start") {
+          let nextGames = document.getElementById("nextGames");
+          if (nextGames != null) {
+            nextGames.innerHTML = contentHTML;
+          }
         }
       }
     });

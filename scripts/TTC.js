@@ -1,5 +1,6 @@
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
+const path = require("path");
 
 class TTC {
   static parseNextGames(data, count) {
@@ -198,7 +199,6 @@ class TTC {
   static saveJSON(res, fileName) {
     const time = new Date().getTime();
     const json = { validUntil: time, games: res };
-
     fs.writeFileSync(
       path.join(__dirname, "..", "scripts") + "/" + fileName,
       JSON.stringify(json)
