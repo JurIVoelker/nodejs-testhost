@@ -3,15 +3,6 @@ const path = require("path");
 
 class PageModify {
   static loadPage(filePath, callback) {
-    filePath = path.join(
-      __dirname,
-      "..",
-      "public",
-      "pages",
-      "start",
-      "start.html"
-    );
-    //filePath = "/var/task/public/pages/" + filePath;
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading the HTML file:", err);
@@ -23,7 +14,8 @@ class PageModify {
   }
 
   static getNthNewsPage(index, isPreview, callback) {
-    let filePath = "./public/pages/aktuelles/";
+    let filePath =
+      path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
 
     // Liest zuerst alle Ordner im Verzeichnis "/server/pages/aktuelles/" aus und liest dann abhängig von [isPreview]
     // aus und öffnet dann den Ordner mit dem neuesten Inhalt (Datum mit höchstem Wert)
@@ -55,7 +47,8 @@ class PageModify {
   }
 
   static getPreviews(page, itemsPerPage, callback) {
-    let filePath = "./public/pages/aktuelles/";
+    let filePath =
+      path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
 
     fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
       if (err) {
@@ -83,7 +76,8 @@ class PageModify {
 
   static startPageArticlePreviews() {
     return new Promise((resolve, reject) => {
-      let filePath = "./public/pages/aktuelles/";
+      let filePath =
+        path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
 
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
         if (err) {
@@ -213,7 +207,8 @@ class PageModify {
 
   static newArticle(title, content, date, fileNames, previewFile) {
     return new Promise((resolve, reject) => {
-      let filePath = "./public/pages/aktuelles/";
+      let filePath =
+        path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
       let newDirectorySuffix = "_0";
 
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
@@ -353,7 +348,8 @@ class PageModify {
   static deleteArticle(path) {
     return new Promise((resolve, reject) => {
       path = path.replace(" ", "/");
-      let folderPath = "./public/pages/" + path;
+      let folderPath =
+        path.join(__dirname, "..", "public", "pages") + "/" + path;
       try {
         fs.rmSync(folderPath, { recursive: true, force: true });
         resolve();
@@ -417,7 +413,7 @@ class PageModify {
   static getNextImages(imgCount) {
     let displayCount = 15;
     return new Promise((resolve, reject) => {
-      let filePath = "./public/pages/galerie/images";
+      let filePath = (__dirname, "..", "public", "pages", "galerie", "images");
       let imageNames = [];
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
         if (!err) {

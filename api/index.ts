@@ -12,22 +12,23 @@ const fs = require("fs");
 
 // Create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
 app.use(express.static("public"));
-app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   // Path when startpage is called
   const queryParam = req.query.page;
   const filePath =
-    queryParam == undefined ? "start/start.html" : queryParam + ".html"; // File path to start page
+    queryParam == undefined
+      ? path.join(__dirname, "..", "public", "pages", "start", "start.html")
+      : path.join(__dirname, "..", "public", "pages") +
+        "/" +
+        queryParam +
+        ".html";
 
   PageModify.loadPage(filePath, (err, data) => {
     // Call PageModify module (/server/scripts/pageModify.js)
     if (err) {
-      res.render("index", {
-        content: "<h1>Ein Fehler ist aufgetreten: </h1><p>" + err + "</p>",
-      });
+      res.send("<h1>Ein Fehler ist aufgetreten: </h1><p>" + err + "</p>");
     } // If reading HTML file was not successful, throw error
     else {
       res.send(`<!DOCTYPE html>
@@ -103,7 +104,7 @@ app.get("/", (req, res) => {
       
       
       <div id="pageContent">
-          <%- content %>
+          ${data}
           <!-- The page content of one of the HTML files in './server/pages/' is being loaded here. ('start.html' by default) -->
       </div>
       <input type="hidden" id="nextGamesData" value="">
@@ -144,7 +145,7 @@ app.post("/api/navigation/:id", (req, res) => {
     page += str[i] + "/";
   }
   page += str[str.length - 1] + ".html"; // Read the requested page from the 'id' parameter in URL request
-
+  page = path.join(__dirname, "..", "public", "pages") + "/" + page;
   PageModify.loadPage(page, (err, data) => {
     // Load the requested page
     if (err) {
