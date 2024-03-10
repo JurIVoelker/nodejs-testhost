@@ -17,8 +17,6 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  throw new Error(__dirname);
-
   // Path when startpage is called
   const queryParam = req.query.page;
   const filePath =

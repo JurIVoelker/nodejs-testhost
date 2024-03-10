@@ -2,7 +2,7 @@ const fs = require("fs");
 
 class PageModify {
   static loadPage(filePath, callback) {
-    filePath = "../public/pages/" + filePath;
+    filePath = "/var/task/public/pages/" + filePath;
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading the HTML file:", err);
