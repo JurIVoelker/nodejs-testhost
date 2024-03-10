@@ -249,7 +249,7 @@ app.get("/api/allGames/", (req, res) => {
     } else {
       TTC.fetchHTML(externeURL).then((data) => {
         const r = TTC.parseNextGames(data, -1);
-        TTC.saveJSON(r, "allGames.json");
+        //TTC.saveJSON(r, "allGames.json");
         res.json(r);
       });
     }
