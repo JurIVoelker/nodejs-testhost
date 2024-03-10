@@ -17,6 +17,8 @@ function navigate(page) {
       document.getElementById("alertPlaceholder").innerHTML = "";
       Ui.setScroll(true);
       _currentPage = Client.getCurrentPage();
+      window.scrollTo(0, 500);
+
       switch (page) {
         case "start start":
           Client.pasteStartData();
@@ -78,7 +80,6 @@ function navigate(page) {
       }
     }
   );
-  window.scrollTo(0, 500);
 }
 
 class Server {
@@ -826,12 +827,12 @@ class Client {
           }
           pageInfo.currentPage = pageInfo.currentPage + 1;
           articlesDom.value = pageInfo;
+          window.scrollTo(0, 500);
 
           Client.insertAktuellesData(data, page, itemCount);
         }
       );
     }
-    window.scrollTo(0, 500);
   }
 
   static saveLocalStorage(name, text) {
