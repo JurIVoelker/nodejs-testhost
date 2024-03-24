@@ -107,15 +107,7 @@ class PageModify {
                   if (err) {
                     reject("Error reading the HTML file:", err);
                   } else {
-                    const jsdom = require("jsdom");
-                    const doc = new jsdom.JSDOM(data);
-                    let title =
-                      doc.window.document.querySelector(".newsTitle").innerHTML;
-                    resolve([
-                      "pages/aktuelles/" + directories[i] + "/preview.jpeg",
-                      title,
-                      "aktuelles " + directories[i],
-                    ]);
+                    resolve(data);
                   }
                 }
               );
@@ -163,41 +155,29 @@ class PageModify {
     }
   }
 
-  static createPreview(path, title, date, content) {
+  static createPreview(path, title, date, previewDescription) {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = path.split("/");
-        previewImagePath.shift();
-        previewImagePath.shift();
-        previewImagePath.shift();
-        let navigationPath = previewImagePath[previewImagePath.length - 1];
-        previewImagePath = previewImagePath.join("/") + "/preview.jpeg";
-        let htmlContent =
-          "<div class='newsPreview' data-location='" +
-          navigationPath +
-          "' onClick='navigate(\"aktuelles " +
-          navigationPath +
-          " content\")'>" +
-          '<div class="previewImage"><img src="' +
-          previewImagePath +
-          '" alt="Vorschaubild"></div>' +
-          '<div class="previewContent">' +
-          '<div class="text">' +
-          '<h4 class="newsTitle">' +
-          title +
-          "</h4>" +
-          "<p>" +
-          content +
-          "</p>" +
-          "</div>" +
-          '<p class="date">' +
-          date +
-          "</p>" +
-          '<div class="readMoreGradient"></div>' +
-          '<a class="readMoreText">Mehr lesen...</a>' +
-          "</div>" +
-          "</div>";
-        this.writeFile(path, htmlContent, "/preview.html");
+        console.log(previewImagePath);
+        let navigationPath = previewImagePath[1];
+        previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
+
+        let html = `
+          <div class="card" data-location="${navigationPath}" onClick="navigate('aktuelles ${navigationPath} content')">
+            <div class="image">
+              <img src="${previewImagePath}" alt="Vorschau Bild">
+            </div> 
+            <div class="content">
+              <div class="text-content">
+                <h3 class="title">${title}</h3>
+                <p class="text">${previewDescription}</p>
+              </div>
+              <p class="date">${date}</p>
+            </div>
+          </div>
+        `;
+        this.writeFile(path, html, "/preview.html");
         resolve();
       } catch (e) {
         reject(e);
@@ -205,7 +185,14 @@ class PageModify {
     });
   }
 
-  static newArticle(title, content, date, fileNames, previewFile) {
+  static newArticle(
+    title,
+    content,
+    date,
+    fileNames,
+    previewFile,
+    previewDescription
+  ) {
     return new Promise((resolve, reject) => {
       let filePath =
         path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
@@ -239,7 +226,7 @@ class PageModify {
                 filePath + newDirectoryName,
                 title,
                 date,
-                content
+                previewDescription
               ),
               PageModify.createPage(
                 filePath + newDirectoryName,
@@ -291,11 +278,11 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = path.split("/");
-        previewImagePath.shift();
-        previewImagePath.shift();
-        previewImagePath.shift();
-        let imgPath = previewImagePath.join("/");
-        previewImagePath = previewImagePath.join("/") + "/preview.jpeg";
+        console.log(previewImagePath);
+        let navigationPath = previewImagePath[1];
+        previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
+
+        let imgPath = `pages/aktuelles/${navigationPath}`;
 
         let images = [[""], [""], [""]];
 

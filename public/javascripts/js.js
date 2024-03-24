@@ -1,9 +1,9 @@
-const host = "https://nodejs-testhost.vercel.app";
+//const host = "https://nodejs-testhost.vercel.app";
 //const host = "http://localhost:3000";
+const host = "http://192.168.2.107:3000";
 
 // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
 window.onscroll = function () {
-  stickyNavbar();
   if (!_requestSent && _currentPage === "galerie/galerie") {
     let elements = document.querySelectorAll(".col");
     for (let i = 0; i < elements.length; i++) {
@@ -22,16 +22,6 @@ window.onload = function () {
   //loadNextGames(6);
   Server.initialize();
 };
-
-function stickyNavbar() {
-  const navbar = document.getElementById("nav");
-  const sticky = 500;
-  if (window.pageYOffset >= sticky) {
-    navbar.classList.add("sticky");
-  } else {
-    navbar.classList.remove("sticky");
-  }
-}
 
 function getNextGamesHTML(element) {
   let time = '<p class="time">' + element.date + " um " + element.time + "</p>";
@@ -68,11 +58,21 @@ function getNextGamesHTML(element) {
     "</p></div>";
 
   if (element.placementHeim === undefined) {
-    heim = "<div><p>" + element.heim + "</p></div>";
-    gast = "<div><p>" + element.gast + "</p></div>";
+    heim = "<div class='rankingContainer' ><p>" + element.heim + "</p></div>";
+    gast = "<div class='rankingContainer' ><p>" + element.gast + "</p></div>";
   } else {
-    heim = "<div>" + heimRank + "<p>" + element.heim + "</p></div>";
-    gast = "<div>" + gastRank + "<p>" + element.gast + "</p></div>";
+    heim =
+      "<div class='rankingContainer'>" +
+      heimRank +
+      "<p>" +
+      element.heim +
+      "</p></div>";
+    gast =
+      "<div class='rankingContainer'> " +
+      gastRank +
+      "<p>" +
+      element.gast +
+      "</p></div>";
   }
 
   return (

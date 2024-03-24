@@ -1,19 +1,30 @@
 require("dotenv").config();
 
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
-const path = require("path");
+const app = express();
 
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+  })
+);
+
+app.use(express.static("public"));
+
+// Create application/x-www-form-urlencoded parser
+const logger = require("morgan");
+app.use(logger("dev"));
+
+app.use(express.json());
+
+const path = require("path");
 //Scripts
 const PageModify = require("../scripts/pageModify.js");
 const TTC = require("../scripts/TTC.js");
 const fs = require("fs");
-
-// Create application/x-www-form-urlencoded parser
-app.use(express.static("public"));
-const logger = require("morgan");
-app.use(logger("dev"));
 
 app.get("/", (req, res) => {
   // Path when startpage is called
@@ -36,13 +47,20 @@ app.get("/", (req, res) => {
       <html lang="de">
       <head>
           <meta charset="UTF-8"/>
-          <link rel="stylesheet" href="/stylesheets/main.css"/>
-          <link rel="stylesheet" href="/stylesheets/start.css"/>
-          <link rel="stylesheet" href="/stylesheets/aktuelles.css"/>
-          <link rel="stylesheet" href="/stylesheets/jugend.css"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="/stylesheets/css/main.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/start.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/training.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
           <script src="javascripts/js.js"></script>
           <script src="javascripts/navigator.js"></script>
           <script src="javascripts/cookieManager.js"></script>
+        
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
       
           <link rel="stylesheet" href="trumbowyg/dist/ui/trumbowyg.min.css">
       
@@ -51,7 +69,7 @@ app.get("/", (req, res) => {
       <div id="banner"><img src="/images/images/title.jpg"></div>
       
       
-      <nav id="nav">
+      <nav class="nav">
           <button id="hamburger" onclick="Client.openHamburgerMenu()"><img src="images/icons/hamburger_menu.svg"></button>
           <ul class="navContainer">
               <li class="noDropdown" onclick="navigate('start start');"><input type="button" value="Start"/></li>
@@ -124,7 +142,7 @@ app.get("/", (req, res) => {
       <div id="alertPlaceholder"></div>
       
       <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+      <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script></script>
       <script src="trumbowyg/dist/trumbowyg.min.js"></script>
       
       </body>
@@ -180,7 +198,7 @@ app.post("/api/login", (req, res) => {
  */
 app.post("/api/authorize", (req, res) => {
   // API request for checking if is logged in
-  let password = req.body.password;
+  let password = "pass123"; // TODO Change
 
   if (password === "pass123") {
     res.json({ isLoggedin: true });
@@ -213,7 +231,7 @@ app.get("/api/nextGames/:count", (req, res) => {
       TTC.fetchHTML(externeURL).then((data) => {
         TTC.nextGamesInfo(data, count)
           .then((r) => {
-            //TTC.saveJSON(r, "games.json");
+            TTC.saveJSON(r, "games.json");
             res.json(r);
           })
           .catch((err) => {
@@ -249,7 +267,7 @@ app.get("/api/allGames/", (req, res) => {
     } else {
       TTC.fetchHTML(externeURL).then((data) => {
         const r = TTC.parseNextGames(data, -1);
-        //TTC.saveJSON(r, "allGames.json");
+        TTC.saveJSON(r, "allGames.json");
         res.json(r);
       });
     }
@@ -280,7 +298,9 @@ app.get("/api/news/previews/:page", (req, res) => {
 app.get("/api/startPageArticlePreviews", (req, res) => {
   PageModify.startPageArticlePreviews()
     .then((data) => {
-      res.json({ data });
+      res.json({
+        data: data,
+      });
     })
     .catch((err) => {
       res.status(500).send(err);
@@ -294,8 +314,16 @@ app.post("/api/newPage", (req, res) => {
   let date = req.body.date;
   let fileNames = req.body.fileNames;
   let previewFile = req.body.previewFile;
+  let previewDescription = req.body.previewDescription;
 
-  PageModify.newArticle(title, content, date, fileNames, previewFile)
+  PageModify.newArticle(
+    title,
+    content,
+    date,
+    fileNames,
+    previewFile,
+    previewDescription
+  )
     .then((paths, previewPath) => {
       res.json({ paths, previewPath });
     })
@@ -309,6 +337,7 @@ app.post("/api/uploadImage", (req, res) => {
   // API request for checking if is logged in
   let fileData = req.body.fileData;
   let path = req.body.path;
+  console.log(path, "uploaded!");
 
   PageModify.saveImage(path, fileData)
     .then(() => {

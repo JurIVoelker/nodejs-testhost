@@ -1,10 +1,30 @@
 <div id="editArticleContainer">
-    <div id="editArticleInfoContainer"><input id="editArticleTitle" type="text" placeholder="Daten werden geladen..."><input id="editArticleDate" type="date"></div>
-    <textarea id="editArticleContent" placeholder="Daten werden geladen..." cols="40" rows="8"></textarea>
+  <div id="editArticleInfoContainer">
+    <input
+      id="editArticleTitle"
+      type="text"
+      placeholder="Daten werden geladen..."
+    /><input id="editArticleDate" type="date" />
+  </div>
+  <textarea
+    id="editArticleContent"
+    placeholder="Daten werden geladen..."
+    cols="40"
+    rows="8"
+  ></textarea>
 </div>
 
 <div id="articleButtons">
-    <input id="cancelNewArticle" type="button" value="Abbrechen" onclick="Client.returnToArticles()">
-    <input id="sendNewArticle" type="button" value="Fertig" onclick="Ui.confirmEdit()">
+  <input
+    id="cancelNewArticle"
+    type="button"
+    value="Abbrechen"
+    onclick="Client.returnToArticles()"
+  />
+  <input
+    id="sendNewArticle"
+    type="button"
+    value="Fertig"
+    onclick="Ui.confirmEdit()"
+  />
 </div>
-

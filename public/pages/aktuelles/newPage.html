@@ -1,22 +1,56 @@
-<div id="articleContainer">
-    <div id="articleTextContent">
-        <input id="articleTitle" type="text" placeholder="Titel hinzufügen...">
-        <textarea id="articleContent" placeholder="Text hinzufügen..." cols="40" rows="8"></textarea>
+<html>
+  <form id="new-article-container" onsubmit="return false">
+    <div class="info-wrapper">
+      <input
+        id="article-title"
+        required
+        type="text"
+        placeholder="Titel hinzufügen..."
+      />
+      <input id="article-date" required type="date" />
     </div>
-    <div id="articleOtherInformation">
-        <input id="articleDate" type="date">
-        <div id="addPhotos" onclick="Client.triggerFileInput()" >
-            <div id="uploadIcon">
-                <img src='images/icons/upload.svg' alt='Upload icon'>
-                <p>Fotos hochladen</p>
-            </div>
-        </div>
-        <input id="imgUploadInput" type="file" multiple value="" name="image" onchange="Client.displaySelectedFiles()">
+
+    <textarea
+      id="articleContent"
+      placeholder="Text hinzufügen..."
+      cols="40"
+      rows="8"
+      required
+    ></textarea>
+
+    <input
+      id="preview-description"
+      type="text"
+      placeholder="Vorschautext hinzufügen..."
+      required
+    />
+
+    <div id="add-photos" onclick="Client.triggerFileInput()">
+      <img src="images/icons/upload.svg" alt="Upload icon" />
+      <p>Fotos hochladen</p>
     </div>
-</div>
+    <input
+      id="img-upload-input"
+      type="file"
+      multiple
+      value=""
+      name="image"
+      onchange="Client.displaySelectedFiles()"
+    />
 
-<div id="articleButtons">
-    <input id="cancelNewArticle" type="button" value="Abbrechen" onclick="Client.returnToArticles()">
-    <input id="sendNewArticle" type="button" value="Fertig" onclick="Server.newPage()">
-</div>
-
+    <div id="article-buttons">
+      <input
+        id="cancel"
+        type="button"
+        value="Abbrechen"
+        onclick="Client.returnToArticles()"
+      />
+      <input
+        id="confirm"
+        type="submit"
+        value="Fertig"
+        onclick="Server.newPage();"
+      />
+    </div>
+  </form>
+</html>
