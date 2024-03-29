@@ -1,3 +1,7 @@
 node_modules
 .env
 .vercel
+public/pages/aktuelles/*
+!public/pages/aktuelles/aktuelles.html
+!public/pages/aktuelles/editPage.html
+!public/pages/aktuelles/newPage.html
