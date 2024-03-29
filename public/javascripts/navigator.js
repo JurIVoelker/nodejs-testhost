@@ -8,7 +8,9 @@ let _requestSent = false;
 
 const getRequest = (path) => {
   return new Promise((resolve, reject) => {
-    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`)
+    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`, {
+      method: "GET",
+    })
       .then((response) => response.json())
       .then((res) => {
         resolve(res);
@@ -44,6 +46,7 @@ function navigate(page) {
     page,
     getCookie("isAuthorized") === "true",
     function (data, isAuthorized) {
+      console.log(data);
       document.getElementById("pageContent").innerHTML = data.content;
       history.pushState(null, null, "?page=" + page.replaceAll(" ", "/"));
       document.getElementById("alertPlaceholder").innerHTML = "";
@@ -112,7 +115,6 @@ function navigate(page) {
       }
     }
   );
-  Client.closeHamburgerMenu();
 }
 
 class Server {
@@ -213,17 +215,19 @@ class Server {
   }
 
   static login(pw) {
+    const password = pw ? pw : document.getElementById("loginField").value;
+
     postRequest("/login", {
-      body: { password: pw ? pw : document.getElementById("loginField").value }, // Send password to server in fetch request body
+      password, // Send password to server in fetch request body
     })
       .then((data) => {
         if (data.isLoggedin) {
-          setCookie("password", password.password, 60); // Save password as cookie for 30 minutes
+          setCookie("password", password, 60); // Save password as cookie for 30 minutes
         }
         document.getElementById("pageContent").innerHTML = data.content; // Change data on page
       })
       .catch((err) => {
-        console.error("Fehler beim laden einer Seite:", error);
+        console.error("Fehler beim laden einer Seite:", err);
       });
   }
 
@@ -436,7 +440,6 @@ class Server {
   static loadStartPageArticlePreviews() {
     getRequest("/startPageArticlePreviews")
       .then((res) => {
-        console.log(res);
         const news = document.getElementById("articles");
         news.innerHTML = `
         <h2 class="title">Aktuelles:</h2>
@@ -613,7 +616,7 @@ class Client {
   static pasteAktuellesData() {
     let articlesDataDom = document.getElementById("newsArticlesData");
     if (articlesDataDom !== null) {
-      let newsContent = document.getElementById(".card-container");
+      let newsContent = document.querySelector(".card-container");
       if (newsContent !== null) {
         newsContent.innerHTML = articlesDataDom.value;
       }
@@ -917,14 +920,6 @@ class Client {
         "\")'> <img src='/images/icons/trash.svg'> </button>";
       previews[i].parentNode.insertBefore(editButtons, previews[i]);
     }
-  }
-
-  static openHamburgerMenu() {
-    document.querySelector(".nav").classList = "navMobile";
-  }
-
-  static closeHamburgerMenu() {
-    document.querySelector(".navMobile").classList = "nav";
   }
 
   static fallbackCopyTextToClipboard(text) {

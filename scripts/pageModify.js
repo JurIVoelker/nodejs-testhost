@@ -92,7 +92,7 @@ class PageModify {
         directories.reverse();
         directories = directories.slice(
           0,
-          directories.length >= 4 ? 4 : directories.length
+          directories.length >= 3 ? 3 : directories.length
         );
 
         let promises = [];
@@ -193,6 +193,23 @@ class PageModify {
     previewFile,
     previewDescription
   ) {
+    if (
+      !title ||
+      !content ||
+      !date ||
+      !fileNames ||
+      !previewFile ||
+      !previewDescription
+    ) {
+      throw new Error(`Not all props defined: 
+      title: ${title}
+      content: ${content}
+      date: ${date}
+      fileNames: ${fileNames}
+      previewFile: ${previewFile}
+      previewDescription: ${previewDescription}
+      `);
+    }
     return new Promise((resolve, reject) => {
       let filePath =
         path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
@@ -202,6 +219,7 @@ class PageModify {
         if (err) {
           reject("Fehler beim Lesen des Verzeichnisses:", err);
         }
+        console.log(filePath);
 
         let directories = files
           .filter((dirent) => dirent.isDirectory())

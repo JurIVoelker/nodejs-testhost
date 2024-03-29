@@ -53,6 +53,8 @@ app.get("/", (req, res) => {
           <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
           <link rel="stylesheet" href="/stylesheets/css/training.css"/>
           <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/trainer.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
           <script src="javascripts/js.js"></script>
           <script src="javascripts/navigator.js"></script>
           <script src="javascripts/cookieManager.js"></script>
@@ -183,8 +185,7 @@ app.post("/api/navigation/:id", (req, res) => {
  **/
 app.post("/api/login", (req, res) => {
   // API request for loading other pages
-  //let password = req.body.password;
-  console.log(req.body);
+  let password = req.body.password;
 
   if (password == "pass123") {
     res.json({ content: "Login erfolgreich", isLoggedin: "true" }); // Else: return HTML content to index.ejs
