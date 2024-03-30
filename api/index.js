@@ -368,12 +368,14 @@ app.post("/api/editPage" /*, upload.single('image')*/, (req, res) => {
   let articleContent = req.body.articleContent;
   let articleDate = req.body.articleDate;
   let editArticlePath = req.body.editArticlePath;
+  let articlePreview = req.body.articlePreview;
 
   PageModify.editArticle(
     articleTitle,
     articleContent,
     articleDate,
-    editArticlePath
+    editArticlePath,
+    articlePreview
   )
     .then(() => {
       res.json({});

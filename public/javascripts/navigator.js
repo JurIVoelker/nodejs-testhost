@@ -46,14 +46,13 @@ function navigate(page) {
     page,
     getCookie("isAuthorized") === "true",
     function (data, isAuthorized) {
-      console.log(data);
       document.getElementById("pageContent").innerHTML = data.content;
       history.pushState(null, null, "?page=" + page.replaceAll(" ", "/"));
       document.getElementById("alertPlaceholder").innerHTML = "";
       Ui.setScroll(true);
       _currentPage = Client.getCurrentPage();
       window.scrollTo(0, 700);
-
+      Client.closeHamburgerMenu();
       switch (page) {
         case "start start":
           Client.pasteStartData();
@@ -73,19 +72,24 @@ function navigate(page) {
           break;
         case "aktuelles editPage":
           Ui.loadScreen();
-          Server.getPageContent(_editArticlePath + " content", true, (data) => {
-            const domParser = new DOMParser();
-            let doc = domParser.parseFromString(data.content, "text/html");
-            let content = doc.querySelector(".textWrap").innerHTML.split(">");
-            content.shift();
-            content = content.join(">");
-            document.getElementById("editArticleTitle").value =
-              doc.querySelector("h1").innerHTML;
-            document.getElementById("editArticleDate").value =
-              doc.getElementById("date").innerHTML;
-            document.querySelector(".trumbowyg-editor").innerHTML = content;
-            Ui.hideAuthorizationWindow();
-          });
+          Server.getPageContent(
+            "aktuelles " + _editArticlePath + " content",
+            true,
+            (data) => {
+              const domParser = new DOMParser();
+              let doc = domParser.parseFromString(data.content, "text/html");
+              let content = doc.querySelector(".textWrap").innerHTML.split(">");
+              content.shift();
+              content = content.join(">");
+              document.getElementById("editArticleTitle").value =
+                doc.querySelector("h1").innerHTML;
+              document.getElementById("editArticleDate").value =
+                doc.getElementById("date").innerHTML;
+              document.querySelector(".trumbowyg-editor").innerHTML = content;
+              document.getElementById("previewText").value = "[unverändert]";
+              Ui.hideAuthorizationWindow();
+            }
+          );
           $("#editArticleContent").trumbowyg();
           break;
         case "termine spiele":
@@ -321,7 +325,6 @@ class Server {
     let content = document.getElementById("articleContent").value;
 
     let files = document.getElementById("img-upload-input").files;
-    console.log(files);
     let previewDescription = document.getElementById(
       "preview-description"
     ).value;
@@ -392,12 +395,14 @@ class Server {
       let articleTitle = document.getElementById("editArticleTitle");
       let articleContent = document.querySelector(".trumbowyg-editor");
       let articleDate = document.getElementById("editArticleDate");
+      let articlePreview = document.getElementById("previewText");
       if (
         Client.validateNewArticle(
           articleTitle,
           articleContent,
           articleDate,
-          true
+          true,
+          articlePreview
         )
       ) {
         postRequest("/editPage", {
@@ -405,6 +410,7 @@ class Server {
           articleContent: articleContent.innerHTML,
           articleDate: articleDate.value,
           editArticlePath: _editArticlePath,
+          articlePreview: articlePreview.value,
         })
           .then(() => {
             Client.returnToArticles();
@@ -421,6 +427,60 @@ class Server {
   static onDeletePage(path) {
     _deletePage = path;
     Ui.confirmDeleteWindow();
+  }
+
+  static showDeleteList() {
+    const container = document.getElementById("alertPlaceholder");
+    const cards = document.querySelectorAll(".card");
+    if (cards) {
+      const html = `
+      <div class="modify-file-list-container"> 
+        <div class="header">
+          <h2>Welchen Artikel möchtest du löschen?</h2>
+          <button onclick="Ui.hideAuthorizationWindow()"> X </button>
+        </div>
+        <div class="modify-file-list">
+          ${Array.from(cards)
+            .map((card) => {
+              return `
+              <button onclick="Server.onDeletePage('${card.dataset.location}')">
+              ${card.querySelector("h3").innerHTML}
+              </button>
+            `;
+            })
+            .join("")}
+          </div>
+      </div>
+      `;
+      container.innerHTML = html;
+    }
+  }
+
+  static showEditList() {
+    const container = document.getElementById("alertPlaceholder");
+    const cards = document.querySelectorAll(".card");
+    if (cards) {
+      const html = `
+      <div class="modify-file-list-container"> 
+        <div class="header">
+          <h2>Welchen Artikel möchtest du bearbeiten?</h2>
+          <button onclick="Ui.hideAuthorizationWindow()"> X </button>
+        </div>
+        <div class="modify-file-list">
+          ${Array.from(cards)
+            .map((card) => {
+              return `
+              <button onclick="Server.onEditPage('${card.dataset.location}')">
+              ${card.querySelector("h3").innerHTML}
+              </button>
+            `;
+            })
+            .join("")}
+          </div>
+      </div>
+      `;
+      container.innerHTML = html;
+    }
   }
 
   static deletePage(isAuthorized) {
@@ -904,22 +964,11 @@ class Client {
   }
 
   static showEditButtons() {
-    let previews = document.querySelectorAll(".newsPreview");
-
-    for (let i = 0; i < previews.length; i++) {
-      let navigationPath =
-        "aktuelles " + previews[i].getAttribute("data-location");
-      let editButtons = document.createElement("div");
-      editButtons.setAttribute("class", "editButtonsContainer");
-      editButtons.innerHTML =
-        "<button class='newsPreviewEditButton' type='button' onclick='Server.onEditPage(\"" +
-        navigationPath +
-        "\")'> <img src='/images/icons/pencil.svg'> </button>" +
-        "<button class='newsPreviewDeleteButton' type='button' onclick='Server.onDeletePage(\"" +
-        navigationPath +
-        "\")'> <img src='/images/icons/trash.svg'> </button>";
-      previews[i].parentNode.insertBefore(editButtons, previews[i]);
-    }
+    let modifyButtons = document.getElementById("modify-buttons");
+    modifyButtons.innerHTML = `
+      <button onclick="Server.showDeleteList()">Löschen</button>
+      <button onclick="Server.showEditList()">Bearbeiten</button>
+    `;
   }
 
   static fallbackCopyTextToClipboard(text) {
@@ -958,6 +1007,12 @@ class Client {
         console.error("Async: Could not copy text: ", err);
       }
     );
+  }
+  static openHamburgerMenu() {
+    document.querySelector("nav").classList = "navMobile";
+  }
+  static closeHamburgerMenu() {
+    document.querySelector("nav").classList = "nav";
   }
 }
 
@@ -1029,7 +1084,7 @@ class Ui {
       "<div id='authorizationWindowContainer'>" +
       "<div id='authorizationWindow'>" +
       "<p id='authorizationWindowInfo'>Möchtest du wirklich den gewählten Artikel löschen?</p>" +
-      "<input id='authorizationWindowSubmit' type='button' value='Löschen' onclick='Ui.confirmDelete()'/>" +
+      `<input id='authorizationWindowSubmit' type='button' value='Löschen' onclick='Ui.confirmDelete()'/>` +
       "<input id='authorizationWindowCancel' type='button' value='Abbrechen' onclick='Ui.hideAuthorizationWindow()'/>" +
       "</div></div>";
   }

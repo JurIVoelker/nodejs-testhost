@@ -12,19 +12,18 @@
     cols="40"
     rows="8"
   ></textarea>
+  <input value="Daten werden geladen..." type="text" id="previewText" />
 </div>
 
 <div id="articleButtons">
-  <input
+  <button
     id="cancelNewArticle"
     type="button"
-    value="Abbrechen"
     onclick="Client.returnToArticles()"
-  />
-  <input
-    id="sendNewArticle"
-    type="button"
-    value="Fertig"
-    onclick="Ui.confirmEdit()"
-  />
+  >
+    Abbrechen
+  </button>
+  <button id="sendNewArticle" type="button" onclick="Ui.confirmEdit()">
+    Speichern
+  </button>
 </div>

@@ -277,7 +277,7 @@ class PageModify {
   static writeFile(path, htmlContent, fileName) {
     let fs = require("fs");
     fs.writeFile(path + fileName, htmlContent, (error) => {
-      /* handle error */
+      console.log(error);
     });
   }
 
@@ -350,11 +350,14 @@ class PageModify {
     });
   }
 
-  static deleteArticle(path) {
+  static deleteArticle(filePath) {
     return new Promise((resolve, reject) => {
-      path = path.replace(" ", "/");
+      filePath = filePath.replace(" ", "/");
       let folderPath =
-        path.join(__dirname, "..", "public", "pages") + "/" + path;
+        path.join(__dirname, "..", "public", "pages", "aktuelles") +
+        "/" +
+        filePath;
+      console.log(folderPath);
       try {
         fs.rmSync(folderPath, { recursive: true, force: true });
         resolve();
@@ -368,9 +371,17 @@ class PageModify {
     articleTitle,
     articleContent,
     articleDate,
-    editArticlePath
+    editArticlePath,
+    articlePreview
   ) {
-    let filePath = editArticlePath.replace(" ", "/");
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "public",
+      "pages",
+      "aktuelles",
+      editArticlePath
+    );
     return new Promise((resolve, reject) => {
       this.loadPage(filePath + "/content.html", (err, data) => {
         if (err) {
@@ -384,7 +395,7 @@ class PageModify {
           doc.window.document.querySelector(".textWrap").innerHTML =
             "<img src='" + imgSrc + "'>" + articleContent;
           this.writeFile(
-            "./public/pages/" + filePath + "/",
+            filePath + "/",
             doc.window.document.documentElement.innerHTML,
             "content.html"
           );
@@ -394,16 +405,15 @@ class PageModify {
               reject(err);
             } else {
               let doc2 = new jsdom.JSDOM(data);
-              doc2.window.document.querySelector("h4").innerHTML = articleTitle;
+              doc2.window.document.querySelector("h3").innerHTML = articleTitle;
               doc2.window.document.querySelector(".date").innerHTML =
                 articleDate;
-              doc2.window.document.querySelector(".text").innerHTML =
-                "<h4 class='newsTitle'>" +
-                articleTitle +
-                "</h4>" +
-                articleContent;
+              if (articlePreview !== "[unverändert]") {
+                doc2.window.document.querySelector(".text").innerHTML =
+                  articlePreview;
+              }
               this.writeFile(
-                "./public/pages/" + filePath + "/",
+                filePath + "/",
                 doc2.window.document.documentElement.innerHTML,
                 "preview.html"
               );
