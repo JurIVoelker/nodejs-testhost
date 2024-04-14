@@ -1,0 +1,31 @@
+@import "variables";
+#nextGames {
+  width: 95%;
+  max-width: 1400px;
+  @include size-s {
+    .game {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .bigRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: auto !important;
+    }
+    tr:nth-child(2n) {
+      background-color: rgb(238, 238, 238);
+      border-radius: $border-radius;
+    }
+  }
+  tr {
+    padding: 0 0 0 10px;
+  }
+  table {
+    @include box-shadow;
+    padding: 20px 40px 20px 40px;
+    margin-bottom: 60px;
+    @include size-s {
+      padding: 10px;
+    }
+  }
+}

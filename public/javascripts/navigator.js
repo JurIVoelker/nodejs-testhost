@@ -51,7 +51,7 @@ function navigate(page) {
       document.getElementById("alertPlaceholder").innerHTML = "";
       Ui.setScroll(true);
       _currentPage = Client.getCurrentPage();
-      window.scrollTo(0, 700);
+      window.scrollTo(0, document.getElementById("banner").offsetHeight);
       Client.closeHamburgerMenu();
       switch (page) {
         case "start start":

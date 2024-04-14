@@ -52,6 +52,9 @@ input {
     object-fit: cover;
     width: 100%;
     margin: 0;
+    @include size-s {
+      height: 325px;
+    }
   }
   margin: 0;
   padding: 0;
@@ -248,4 +251,9 @@ footer {
     margin-top: 50px;
     text-align: center;
   }
+}
+
+.basic-text {
+  width: 95%;
+  max-width: 1400px;
 }

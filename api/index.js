@@ -55,6 +55,8 @@ app.get("/", (req, res) => {
           <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
           <link rel="stylesheet" href="/stylesheets/css/trainer.css"/>
           <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/halle.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/naechste-spiele.css"/>
           <script src="javascripts/js.js"></script>
           <script src="javascripts/navigator.js"></script>
           <script src="javascripts/cookieManager.js"></script>

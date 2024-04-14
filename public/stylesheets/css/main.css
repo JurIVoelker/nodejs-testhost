@@ -301,6 +301,11 @@ input {
   width: 100%;
   margin: 0;
 }
+@media only screen and (max-width: 768px) {
+  #banner img {
+    height: 325px;
+  }
+}
 
 .nav {
   position: sticky;
@@ -486,4 +491,9 @@ footer #logosContainer #logos img {
 footer #copyright {
   margin-top: 50px;
   text-align: center;
+}
+
+.basic-text {
+  width: 95%;
+  max-width: 1400px;
 }/*# sourceMappingURL=main.css.map */
