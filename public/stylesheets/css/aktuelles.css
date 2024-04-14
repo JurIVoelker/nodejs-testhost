@@ -1,0 +1,467 @@
+#new-article-container {
+  margin-top: 60px;
+  max-width: 1400px;
+  width: 95%;
+}
+#new-article-container .info-wrapper {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+@media only screen and (max-width: 768px) {
+  #new-article-container .info-wrapper {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+#new-article-container .info-wrapper #article-title {
+  width: 70%;
+  height: 50px;
+  border-radius: 10px;
+  font-family: Lato;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  padding-left: 15px;
+}
+@media only screen and (max-width: 768px) {
+  #new-article-container .info-wrapper #article-title {
+    width: calc(100% - 15px);
+  }
+}
+#new-article-container .info-wrapper #article-date {
+  height: 50px;
+  border-radius: 10px;
+  font-family: Lato;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 30%;
+}
+@media only screen and (max-width: 768px) {
+  #new-article-container .info-wrapper #article-date {
+    width: calc(100% - 30px);
+  }
+}
+#new-article-container #preview-description {
+  margin-top: 40px;
+  height: 50px;
+  border-radius: 10px;
+  font-family: Lato;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  padding-left: 15px;
+  width: calc(100% - 15px);
+}
+#new-article-container #add-photos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 230px;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  border-radius: 10px;
+  margin-top: 40px;
+}
+#new-article-container #add-photos img {
+  height: 40px;
+}
+#new-article-container #img-upload-input {
+  display: none;
+}
+#new-article-container #article-buttons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 60px;
+}
+@media only screen and (max-width: 768px) {
+  #new-article-container #article-buttons {
+    justify-content: center;
+  }
+}
+#new-article-container #article-buttons #cancel {
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #6b8dcb;
+  color: #6b8dcb;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+}
+#new-article-container #article-buttons #cancel:hover {
+  cursor: pointer;
+}
+#new-article-container #article-buttons #confirm {
+  height: 50px;
+  border-radius: 10px;
+  background-color: #6b8dcb;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+}
+#new-article-container #article-buttons #confirm:hover {
+  cursor: pointer;
+}
+#new-article-container #article-buttons input {
+  max-width: 200px;
+  width: 100%;
+}
+
+#file-list {
+  padding: 40px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 150px));
+  gap: 20px;
+}
+#file-list .image-preview {
+  white-space: nowrap;
+  overflow: hidden; /* This hides the overflow text */
+  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+#file-list .image-preview img {
+  width: 80px;
+  height: 80px !important;
+  object-fit: cover;
+}
+#file-list .image-preview p {
+  width: 100%;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+#alertPlaceholder #authorizationWindowContainer {
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7176470588);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#alertPlaceholder #authorizationWindowContainer #selectPreviewImageContainer {
+  width: clamp(70%, 70%, 1400px);
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px;
+}
+#alertPlaceholder #authorizationWindowContainer #selectPreviewImageContainer .file-list {
+  padding: 40px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 150px));
+  gap: 20px;
+  padding: 20px 0 0 0 !important;
+}
+#alertPlaceholder #authorizationWindowContainer #selectPreviewImageContainer .file-list .image-preview {
+  white-space: nowrap;
+  overflow: hidden; /* This hides the overflow text */
+  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+#alertPlaceholder #authorizationWindowContainer #selectPreviewImageContainer .file-list .image-preview img {
+  width: 80px;
+  height: 80px !important;
+  object-fit: cover;
+}
+#alertPlaceholder #authorizationWindowContainer #selectPreviewImageContainer .file-list .image-preview p {
+  width: 100%;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+#newsContent {
+  max-width: 1400px;
+}
+#newsContent .card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+@media only screen and (max-width: 768px) {
+  #newsContent .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+#newsContent .card-container .card {
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  border-radius: 10px;
+  height: auto;
+}
+@media only screen and (max-width: 768px) {
+  #newsContent .card-container .card {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
+#newsContent .card-container .card .image img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  max-height: 350px;
+  object-fit: cover;
+}
+#newsContent .card-container .card .content {
+  padding: 20px 40px 40px 40px;
+}
+#newsContent .card-container .card .content .title {
+  color: #2c3966;
+}
+#newsContent .card-container .card .content .text {
+  color: rgb(107, 105, 124);
+}
+
+#articlePageContent {
+  max-width: 1400px;
+  width: 100%;
+}
+#articlePageContent h1 {
+  margin-top: 60px;
+}
+@media only screen and (max-width: 768px) {
+  #articlePageContent h1 {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
+#articlePageContent #date {
+  width: 95%;
+  margin-left: 2.5%;
+}
+
+#imgBox {
+  max-width: 1400px;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0 40px 0 40px;
+  gap: 20px;
+}
+#imgBox img {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+@media only screen and (max-width: 768px) {
+  #imgBox {
+    display: block;
+    padding: 0;
+    gap: 0;
+  }
+  #imgBox img {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+}
+
+#newArticlePlaceholder {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#newArticlePlaceholder #newArticle {
+  margin: 40px 0 40px 0;
+  display: flex;
+  justify-content: center;
+  max-width: 1400px;
+  width: 90%;
+  border-radius: 10px;
+  border: 4px dashed orange;
+}
+
+.modify-file-list-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 32;
+  background-color: rgba(0, 0, 0, 0.795);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.modify-file-list-container .header {
+  display: flex;
+  width: 95%;
+  max-width: 1400px;
+  justify-content: space-between;
+}
+.modify-file-list-container .header h2 {
+  color: white;
+}
+.modify-file-list-container .header button {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #6b8dcb;
+  color: #6b8dcb;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  color: white !important;
+}
+.modify-file-list-container .header button:hover {
+  cursor: pointer;
+}
+.modify-file-list-container .modify-file-list {
+  width: 95%;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.modify-file-list-container .modify-file-list button {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  background-color: #6b8dcb;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  text-align: left;
+  padding: 0 20px 0 20px;
+}
+.modify-file-list-container .modify-file-list button:hover {
+  cursor: pointer;
+}
+
+#modify-buttons {
+  width: 95%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+@media only screen and (max-width: 768px) {
+  #modify-buttons {
+    justify-content: center;
+  }
+}
+#modify-buttons button {
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #6b8dcb;
+  color: #6b8dcb;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  width: 200px;
+  margin-bottom: 40px;
+}
+#modify-buttons button:hover {
+  cursor: pointer;
+}
+
+#editArticleContainer {
+  width: 95%;
+  max-width: 1400px;
+}
+#editArticleContainer #editArticleInfoContainer {
+  display: flex;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+@media only screen and (max-width: 768px) {
+  #editArticleContainer #editArticleInfoContainer {
+    display: block;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #editArticleContainer #editArticleInfoContainer #editArticleTitle {
+    margin-bottom: 40px;
+  }
+}
+#editArticleContainer input {
+  height: 50px;
+  border-radius: 10px;
+  font-family: Lato;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  padding: 0 10px 0 10px;
+  width: calc(100% - 20px);
+}
+
+#cancelNewArticle {
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #6b8dcb;
+  color: #6b8dcb;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  width: 200px;
+}
+#cancelNewArticle:hover {
+  cursor: pointer;
+}
+
+#sendNewArticle {
+  height: 50px;
+  border-radius: 10px;
+  background-color: #6b8dcb;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  width: 200px;
+}
+#sendNewArticle:hover {
+  cursor: pointer;
+}
+
+#articleButtons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 1400px;
+}
+@media only screen and (max-width: 768px) {
+  #articleButtons {
+    justify-content: center;
+  }
+}
+
+#previewText {
+  margin-top: 40px;
+}
+
+#authorizationWindow p {
+  color: white;
+}/*# sourceMappingURL=aktuelles.css.map */

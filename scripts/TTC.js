@@ -45,11 +45,15 @@ class TTC {
             heim.includes("Klingenmünster") ? heim : gast,
             league
           );
-          arr.push(new Game(league, heim, gast, prevDate, time, url));
-          if (count <= 1) {
-            break; // Stop the loop here
+          if (!url) {
+            console.log("Error: " + league, heim, gast, prevDate, time);
+          } else {
+            arr.push(new Game(league, heim, gast, prevDate, time, url));
+            if (count <= 1) {
+              break; // Stop the loop here
+            }
+            count--;
           }
-          count--;
         }
       }
     }

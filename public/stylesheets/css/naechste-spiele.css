@@ -1,0 +1,32 @@
+#nextGames {
+  width: 95%;
+  max-width: 1400px;
+}
+@media only screen and (max-width: 768px) {
+  #nextGames .game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  #nextGames .bigRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: auto !important;
+  }
+  #nextGames tr:nth-child(2n) {
+    background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+  }
+}
+#nextGames tr {
+  padding: 0 0 0 10px;
+}
+#nextGames table {
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  padding: 20px 40px 20px 40px;
+  margin-bottom: 60px;
+}
+@media only screen and (max-width: 768px) {
+  #nextGames table {
+    padding: 10px;
+  }
+}/*# sourceMappingURL=naechste-spiele.css.map */

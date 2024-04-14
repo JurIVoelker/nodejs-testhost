@@ -1,49 +1,149 @@
 <div id="startText">
-    <div class="text_content">
-        <h1>Willkommen beim TTC Klingenmünster</h1>
-        <p>Wir sind mit 7 Herren-, 1 Damen- und 6 Jugendmannschaften der Tischtennisverein mit den meisten Mannschaften der Pfalz. Insbesondere Gemeinschaft zeichnet uns aus: Geselligkeit, Spaß am Sport und ein lebendiges Vereinsleben stehen bei uns an erster Stelle und sorgen für ein familiäres Umfeld. </p>
-        <p>Wir geben Vollgas in der Jugendarbeit. Mit unseren 35 Jugendspielern zählen wir zu den erfolgreichsten Vereinen der Pfalz im Jugendtischtennis. Darüber hinaus sorgen eine Mischung aus Spaß und Leistung im Training, vielseitige Events sowie Jugendfreizeiten für eine starke Gemeinschaft.</p>
-    </div>
-    <div id="start-img-container"><img src="pages/start/img1.jpg"></div>
+  <div class="text_content">
+    <h1>Willkommen beim TTC Klingenmünster</h1>
+    <p>
+      Wir sind mit 7 Herren-, 1 Damen- und 6 Jugendmannschaften der
+      Tischtennisverein mit den meisten Mannschaften der Pfalz. Insbesondere
+      Gemeinschaft zeichnet uns aus: Geselligkeit, Spaß am Sport und ein
+      lebendiges Vereinsleben stehen bei uns an erster Stelle und sorgen für ein
+      familiäres Umfeld.
+    </p>
+    <p>
+      Wir geben Vollgas in der Jugendarbeit. Mit unseren 35 Jugendspielern
+      zählen wir zu den erfolgreichsten Vereinen der Pfalz im Jugendtischtennis.
+      Darüber hinaus sorgen eine Mischung aus Spaß und Leistung im Training,
+      vielseitige Events sowie Jugendfreizeiten für eine starke Gemeinschaft.
+    </p>
+  </div>
+  <div id="start-img-container"><img src="pages/start/img1.jpg" /></div>
 </div>
 
 <div id="infoBoxes">
-    <div class="box">
-        <h1>Jugendtraining</h1>
-        <p>Unser junges Trainierteam trainiert an bis zu 3 Tagen pro Woche mit unserem Nachwuchs und sorgt durch eine ausgewogene Mischung aus Spaß und Leistung für eine hohe Trainingsmotivation. Dieses Engagement macht sich durch zahlreiche Erfolge auf Bezirks-, Pfalz- und nationaler Ebene belohnt.
-        </p>
-        <button type="button" onclick="navigate('jugend training')"> Mehr Infos</button>
-    </div>
-    <div class="box">
-        <h1>Erwachsenentraining</h1>
-        <p>Wir trainieren 3 Mal wöchentlich und legen einen hohen Wert auf Geselligkeit. Unser Training wird nicht durch Trainer strukturiert, sondern wir suchen uns spontan Spielpartner und trainieren nach eigenen Präferenzen. Dadurch wird der eigentliche Trainingseffekt mit sozialen Aspekten verbunden.</p>
-        <button type="button" onclick="navigate('erwachsene training')"> Mehr Infos</button>
-    </div>
-    <div class="box">
-        <h1>Sponsoring</h1>
-        <p>Unsere Sponsoren und Partner spielen eine Schlüsselrolle dabei, unseren Nachwuchs zu fördern und unseren Verein zu stärken. Ein herzliches Dankeschön für die Zusammenarbeit! Wir freuen uns ebenso über neue Partner und Sponsoren, um gemeinsam den Sport und Verein voranzubringen.</p>
-        <button type="button" onclick="navigate('verein sponsoren')"> Mehr Infos</button>
+  <h2>Mehr über unseren Verein:</h2>
+  <div class="card-container">
+    <div class="card">
+      <div class="image"><img src="pages/jugend/images/training.jpg" /></div>
+      <div class="content">
+        <div class="text-content">
+          <h3 class="title">Jugendtraining</h3>
+          <p class="text">
+            Unser junges Trainierteam trainiert an bis zu 3 Tagen pro Woche mit
+            unserem Nachwuchs und sorgt durch eine ausgewogene Mischung aus Spaß
+            und Leistung für eine hohe Trainingsmotivation. Dieses Engagement
+            macht sich durch zahlreiche Erfolge auf Bezirks-, Pfalz- und
+            nationaler Ebene belohnt.
+          </p>
+        </div>
+      </div>
+      <button class="learn-more" onclick="navigate('jugend training')">
+        Mehr erfahren...
+      </button>
     </div>
 
-</div>
-
-<div class="news">
-    <h2>Aktuelles:</h2>
-    <div id="newsWrapper">
-        <div class="newsItem">
-            <div class="image"></div>
-            <div class="titleWrapper"><h3 class="title">news1</h3></div>
+    <div class="card">
+      <div class="image"><img src="pages/erwachsene/images/main.jpg" /></div>
+      <div class="content">
+        <div class="text-content">
+          <h3 class="title">Erwachsenentraining</h3>
+          <p class="text">
+            Wir trainieren 3 Mal wöchentlich und legen einen hohen Wert auf
+            Geselligkeit. Unser Training wird nicht durch Trainer strukturiert,
+            sondern wir suchen uns spontan Spielpartner und trainieren nach
+            eigenen Präferenzen. Dadurch wird der eigentliche Trainingseffekt
+            mit sozialen Aspekten verbunden.
+          </p>
         </div>
-        <div class="newsItem">
-            <div class="image"></div>
-            <div class="titleWrapper"><h3 class="title">news2</h3></div>
-        </div>
-        <div class="newsItem">
-            <div class="image"></div>
-            <div class="titleWrapper"><h3 class="title">news3</h3></div>
-        </div>
+      </div>
+      <button class="learn-more" onclick="navigate('erwachsene training')">
+        Mehr erfahren...
+      </button>
     </div>
+
+    <div class="card">
+      <div class="image"><img src="pages/start/img1.jpg" /></div>
+      <div class="content">
+        <div class="text-content">
+          <h3 class="title">Sponsoring</h3>
+          <p class="text">
+            Unsere Sponsoren und Partner spielen eine Schlüsselrolle dabei,
+            unseren Nachwuchs zu fördern und unseren Verein zu stärken. Ein
+            herzliches Dankeschön für die Zusammenarbeit! Wir freuen uns ebenso
+            über neue Partner und Sponsoren, um gemeinsam den Sport und Verein
+            voranzubringen.
+          </p>
+        </div>
+      </div>
+      <button class="learn-more" onclick="navigate('verein sponsoren')">
+        Mehr erfahren...
+      </button>
+    </div>
+  </div>
+  <!--
+  <div class="box">
+    <h2>Jugendtraining</h2>
+    <p>
+      Unser junges Trainierteam trainiert an bis zu 3 Tagen pro Woche mit
+      unserem Nachwuchs und sorgt durch eine ausgewogene Mischung aus Spaß und
+      Leistung für eine hohe Trainingsmotivation. Dieses Engagement macht sich
+      durch zahlreiche Erfolge auf Bezirks-, Pfalz- und nationaler Ebene
+      belohnt.
+    </p>
+    <button type="button" onclick="navigate('jugend training')">
+      Mehr Infos
+    </button>
+  </div>
+  <div class="box">
+    <h2>Erwachsenentraining</h2>
+    <p>
+      Wir trainieren 3 Mal wöchentlich und legen einen hohen Wert auf
+      Geselligkeit. Unser Training wird nicht durch Trainer strukturiert,
+      sondern wir suchen uns spontan Spielpartner und trainieren nach eigenen
+      Präferenzen. Dadurch wird der eigentliche Trainingseffekt mit sozialen
+      Aspekten verbunden.
+    </p>
+    <button type="button" onclick="navigate('erwachsene training')">
+      Mehr Infos
+    </button>
+  </div>
+  <div class="box">
+    <h2>Sponsoring</h2>
+    <p>
+      Unsere Sponsoren und Partner spielen eine Schlüsselrolle dabei, unseren
+      Nachwuchs zu fördern und unseren Verein zu stärken. Ein herzliches
+      Dankeschön für die Zusammenarbeit! Wir freuen uns ebenso über neue Partner
+      und Sponsoren, um gemeinsam den Sport und Verein voranzubringen.
+    </p>
+    <button type="button" onclick="navigate('verein sponsoren')">
+      Mehr Infos
+    </button>
+  </div>-->
 </div>
 
-<div id="nextGames">
+<div id="articles">
+  <h2 class="title">Aktuelles:</h2>
+  <div class="card-container">
+    <div class="card">
+      <div class="image"></div>
+      <div class="content">
+        <h3 class="title">news1</h3>
+        <p class="text"></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <div class="content">
+        <h3 class="title">news1</h3>
+        <p class="text"></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="image"></div>
+      <div class="content">
+        <h3 class="title">news1</h3>
+        <p class="text"></p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!--<div id="nextGames"></div>-->

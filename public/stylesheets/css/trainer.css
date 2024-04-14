@@ -1,0 +1,43 @@
+.trainer {
+  max-width: 1400px;
+  width: 100%;
+}
+@media only screen and (max-width: 768px) {
+  .trainer {
+    width: 95%;
+  }
+}
+.trainer .trainerRow {
+  margin-bottom: 40px;
+  display: flex;
+  gap: 40px;
+}
+@media only screen and (max-width: 768px) {
+  .trainer .trainerRow {
+    display: block;
+  }
+}
+.trainer .trainerRow img {
+  height: 600px;
+  border-radius: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .trainer .trainerRow img {
+    margin-top: 40px;
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+.trainer .trainerRow .content div {
+  margin: 0 0 15px 0;
+}
+@media only screen and (max-width: 768px) {
+  .trainer .trainerRow .content div {
+    margin: 0 0 8px 0;
+  }
+}
+.trainer .trainerRow .content div h3, .trainer .trainerRow .content div p {
+  margin: 0;
+  display: inline;
+}/*# sourceMappingURL=trainer.css.map */

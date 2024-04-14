@@ -1,0 +1,155 @@
+// colors
+$primary-bg: #ffffff;
+$primary-bg-hover: #cbcbcb;
+
+$primary: #6b8dcb;
+$primary-hover: #5673a2;
+
+$primary-dark: #6b8dcb;
+
+$secondary: #2c3966;
+
+$gray: #7c7c7c;
+
+$nav: #5e7bad;
+$nav-dropdown: #58709d;
+$nav-hover: rgba(255, 255, 255, 0.2);
+
+$font-family: Lato;
+// breakpoints
+$size-s: 768px;
+$max-width: 1700px;
+
+@mixin size-s {
+  @media only screen and (max-width: $size-s) {
+    @content;
+  }
+}
+
+// spacing
+$border-radius: 10px;
+
+$paragraph-size: 20px;
+$paragraph-line-height: 28px;
+
+$header-size: 32px;
+$header-line-height: 38px;
+
+// z-indicies
+
+$z-index-nav: 30;
+$z-index-mobile-nav: 31;
+$z-index-alert-placeholder: 32;
+
+// styles
+@mixin button($style: "regular") {
+  height: 50px;
+  border-radius: $border-radius;
+  @if $style == "regular" {
+    background-color: $primary;
+    border: none;
+    color: white;
+  }
+  @if $style == "outline" {
+    background-color: rgba($color: #000000, $alpha: 0);
+    border: 2px solid $primary;
+    color: $primary-dark;
+  }
+  font-size: $paragraph-size;
+  font-family: $font-family;
+  text-decoration: underline;
+  &:hover {
+    cursor: pointer;
+  }
+  @content;
+}
+
+@mixin box-shadow() {
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+}
+
+@mixin card {
+  .card-container {
+    @content;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    @include size-s {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .card {
+      @include box-shadow;
+      border-radius: $border-radius;
+      height: auto;
+      @include size-s {
+        width: 95%;
+        margin-left: 2.5%;
+      }
+      .image {
+        img {
+          width: 100%;
+          border-radius: $border-radius $border-radius 0 0;
+          max-height: 350px;
+          object-fit: cover;
+        }
+      }
+      .content {
+        padding: 20px 40px 40px 40px;
+        .title {
+          color: $secondary;
+        }
+        .text {
+          color: rgb(107, 105, 124);
+        }
+      }
+    }
+  }
+}
+
+@mixin alert {
+  #alertPlaceholder #authorizationWindowContainer {
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #000000b7;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @content;
+  }
+}
+
+@mixin fileList {
+  padding: 40px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 150px));
+  gap: 20px;
+  @content;
+  .image-preview {
+    white-space: nowrap;
+    overflow: hidden; /* This hides the overflow text */
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 80px;
+      height: 80px !important;
+      object-fit: cover;
+    }
+    p {
+      width: 100%;
+      font-size: 16px;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+  }
+}

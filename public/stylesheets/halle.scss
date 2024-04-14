@@ -1,0 +1,58 @@
+@import "variables";
+
+.infoGrid {
+  width: 95%;
+  max-width: 1400px;
+  @include size-s {
+    width: 100%;
+  }
+  img {
+    width: 100%;
+  }
+  .infoGrid_content {
+    @include size-s {
+      width: 95%;
+      margin-left: 2.5%;
+    }
+  }
+  .infoButtons {
+    margin-bottom: 60px;
+    display: flex;
+    gap: 80px;
+    @include size-s {
+      flex-direction: column;
+      gap: 20px;
+    }
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    .infoField {
+      margin-left: 10px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      p {
+        margin: 0;
+      }
+    }
+    .contactButton {
+      display: flex;
+      height: 50px;
+      background: none;
+      border: none;
+      gap: 20px;
+      div {
+        @include button;
+        width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      a {
+        font-size: $paragraph-size;
+        line-height: 50px;
+      }
+    }
+  }
+}

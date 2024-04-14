@@ -6,6 +6,40 @@ let _hamburgerContent = "";
 let _currentPage = "start/start";
 let _requestSent = false;
 
+const getRequest = (path) => {
+  return new Promise((resolve, reject) => {
+    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+const postRequest = (path, body) => {
+  return new Promise((resolve, reject) => {
+    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: typeof body === "string" ? body : JSON.stringify(body), // Send password to server in fetch request body
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 function navigate(page) {
   // Method fetches data of requested page
   Server.getPageContent(
@@ -17,8 +51,8 @@ function navigate(page) {
       document.getElementById("alertPlaceholder").innerHTML = "";
       Ui.setScroll(true);
       _currentPage = Client.getCurrentPage();
-      window.scrollTo(0, 500);
-
+      window.scrollTo(0, document.getElementById("banner").offsetHeight);
+      Client.closeHamburgerMenu();
       switch (page) {
         case "start start":
           Client.pasteStartData();
@@ -38,19 +72,24 @@ function navigate(page) {
           break;
         case "aktuelles editPage":
           Ui.loadScreen();
-          Server.getPageContent(_editArticlePath + " content", true, (data) => {
-            const domParser = new DOMParser();
-            let doc = domParser.parseFromString(data.content, "text/html");
-            let content = doc.querySelector(".textWrap").innerHTML.split(">");
-            content.shift();
-            content = content.join(">");
-            document.getElementById("editArticleTitle").value =
-              doc.querySelector("h1").innerHTML;
-            document.getElementById("editArticleDate").value =
-              doc.getElementById("date").innerHTML;
-            document.querySelector(".trumbowyg-editor").innerHTML = content;
-            Ui.hideAuthorizationWindow();
-          });
+          Server.getPageContent(
+            "aktuelles " + _editArticlePath + " content",
+            true,
+            (data) => {
+              const domParser = new DOMParser();
+              let doc = domParser.parseFromString(data.content, "text/html");
+              let content = doc.querySelector(".textWrap").innerHTML.split(">");
+              content.shift();
+              content = content.join(">");
+              document.getElementById("editArticleTitle").value =
+                doc.querySelector("h1").innerHTML;
+              document.getElementById("editArticleDate").value =
+                doc.getElementById("date").innerHTML;
+              document.querySelector(".trumbowyg-editor").innerHTML = content;
+              document.getElementById("previewText").value = "[unverändert]";
+              Ui.hideAuthorizationWindow();
+            }
+          );
           $("#editArticleContent").trumbowyg();
           break;
         case "termine spiele":
@@ -116,7 +155,7 @@ class Server {
       case "termine/spiele":
         Server.loadAllGames((data) => {
           let contentHTML =
-            "<h1 style='margin-bottom: 30px'>Unsere nächsten Spiele:</h1>" +
+            "<h2 style='margin-bottom: 30px'>Unsere nächsten Spiele:</h2>" +
             "<table><tr class='bigRow'><td><h3>Heimmannschaft</h3></td><td><h3>Uhrzeit und Datum</h3></td><td><h3>Gastmannschaft</h3></td><td><h3>Liga</h3></td></tr>";
           data.nextGames.forEach((element) => {
             contentHTML += getNextGamesHTML(element);
@@ -139,27 +178,7 @@ class Server {
         break;
     }
 
-    Server.loadNextGames(4, function (data) {
-      console.log(data);
-      if (data) {
-        let contentHTML =
-          "<h1 style='margin-bottom: 30px'>Unsere nächsten Spiele:</h1>" +
-          "<table><tr class='bigRow'><td><h3>Heimmannschaft</h3></td><td><h3>Uhrzeit und Datum</h3></td><td><h3>Gastmannschaft</h3></td><td><h3>Liga</h3></td></tr>";
-        data.forEach((element) => {
-          contentHTML += getNextGamesHTML(element);
-        });
-        contentHTML += "</table>";
-
-        document.getElementById("nextGamesData").value = contentHTML;
-
-        if (Client.getCurrentPage() === "start/start") {
-          let nextGames = document.getElementById("nextGames");
-          if (nextGames != null) {
-            nextGames.innerHTML = contentHTML;
-          }
-        }
-      }
-    });
+    Server.loadNextGames(4);
     Server.loadArticlePreviewData(0, 6, function (data, page, itemCount) {
       Client.insertAktuellesData(data, page, itemCount);
     });
@@ -188,166 +207,89 @@ class Server {
   }
 
   static getPageContent(page, isAuthorized, callback) {
-    fetch(host + "/api/navigation/" + page, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isAuthorized: isAuthorized }), // Send password to server in fetch request body
+    postRequest("/navigation/" + page, {
+      body: { isAuthorized: isAuthorized },
     })
-      .then((response) => response.json())
       .then((data) => {
         callback(data, isAuthorized);
       })
-      .catch((error) => console.error("Fehler:", error)); // If an error occured while fetching
-  }
-
-  static login(pw = "") {
-    // Method sends POST request to API with login data
-    let password = {
-      // If password is passed as parameter, us that one as the password
-      password:
-        "" + (pw === "" ? document.getElementById("loginField").value : pw),
-    };
-
-    fetch(host + "/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(password), // Send password to server in fetch request body
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.isLoggedin) {
-          setCookie("password", password.password, 60); // Save password as cookie for 30 minutes
-        }
-        document.getElementById("pageContent").innerHTML = data.content; // Change data on page
-      })
-      .catch((error) => console.error("Fehler:", error)); // If an error occured while fetching, return error
-  }
-
-  static loadNextGames(count, callback) {
-    fetch(host + "/api/nextGames/" + count, {
-      method: "GET", // Send password to server in fetch request body
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        callback(data);
-      })
-      .catch((error) => console.error("Fehler:", error)); // If an error occurred while fetching
-  }
-
-  static loadArticlePreviewData(page, itemCount, callback) {
-    fetch(host + "/api/news/previews/" + page + "?itemsPerPage=" + itemCount, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        callback(data, page, itemCount);
-      })
-      .catch((error) => console.error("Fehler:", error)); // If an error occured while fetching
-  }
-
-  static loadTeamPlacements(data) {
-    let urls = [];
-    data.nextGames.forEach((element) => {
-      urls.push(
-        encodeURIComponent(
-          Client.getLeagueURL(
-            element.heim.includes("Klingenmünster")
-              ? element.heim
-              : element.gast,
-            element.league
-          )
-        ) +
-          "&heim=" +
-          element.heim +
-          "&gast=" +
-          element.gast
-      );
-    });
-
-    const fetchPromises = urls.map((url) => Server.fetchGameRank(url));
-
-    Promise.all(fetchPromises)
-      .then((results) => {
-        const domParser = new DOMParser();
-        let xmlDoc = domParser.parseFromString(
-          document.getElementById("nextGamesData").value,
-          "text/html"
-        );
-        let entry = xmlDoc.querySelectorAll(".game");
-        for (let i = 0; i < entry.length; i++) {
-          if (!isNaN(results[i][0]) && !isNaN(results[i][1])) {
-            entry[i].querySelector(".heim p").innerHTML = results[i][0];
-            entry[i].querySelector(".gast p").innerHTML = results[i][1];
-            entry[i]
-              .querySelector(".heim")
-              .setAttribute(
-                "data-bg",
-                results[i][0] == "1"
-                  ? "gold"
-                  : results[i][0] == "2"
-                  ? "silver"
-                  : results[i][0] == "3"
-                  ? "bronze"
-                  : "other"
-              );
-            entry[i]
-              .querySelector(".gast")
-              .setAttribute(
-                "data-bg",
-                results[i][1] == "1"
-                  ? "gold"
-                  : results[i][1] == "2"
-                  ? "silver"
-                  : results[i][1] == "3"
-                  ? "bronze"
-                  : "other"
-              );
-          }
-        }
-        if (Client.getCurrentPage() === "start/start") {
-          document.getElementById("nextGames").innerHTML =
-            xmlDoc.body.innerHTML;
-        }
-        document.getElementById("nextGamesData").value = xmlDoc.body.innerHTML;
-      })
-      .catch((error) => {
-        console.error("Ein Fehler ist aufgetreten:", error);
+      .catch((err) => {
+        console.error("Fehler beim laden einer Seite:", err);
       });
   }
 
-  static fetchGameRank(url) {
-    return new Promise((resolve, reject) => {
-      if (url !== undefined) {
-        fetch(host + "/api/gameRank?url=" + url, {
-          method: "GET", // Send password to server in fetch request body
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            resolve(data);
-          })
-          .catch((error) => reject(error));
-      } else {
-        reject("Error");
+  static login(pw) {
+    const password = pw ? pw : document.getElementById("loginField").value;
+
+    postRequest("/login", {
+      password, // Send password to server in fetch request body
+    })
+      .then((data) => {
+        if (data.isLoggedin) {
+          setCookie("password", password, 60); // Save password as cookie for 30 minutes
+        }
+        document.getElementById("pageContent").innerHTML = data.content; // Change data on page
+      })
+      .catch((err) => {
+        console.error("Fehler beim laden einer Seite:", err);
+      });
+  }
+
+  static loadNextGames(count) {
+    getRequest("/nextGames/" + count).then((data) => {
+      if (data) {
+        const titel = "Unsere nächsten Spiele:";
+        const html = `
+          <h2>${titel}</h2> 
+          <table>
+            <tr class='bigRow'>
+              <td><h3>Heimmannschaft<h3></td>
+              <td><h3>Uhrzeit und Datum</h3></td>
+              <td><h3>Gastmannschaft<h3></td>
+              <td><h3>Liga<h3></td>
+            </tr>
+        ${data.map((game) => {
+          return getNextGamesHTML(game);
+        })}
+        </table>
+        `;
+
+        document.getElementById("nextGamesData").value = html;
+
+        if (Client.getCurrentPage() === "start/start") {
+          let nextGames = document.getElementById("nextGames");
+          if (nextGames != null) {
+            nextGames.innerHTML = html;
+          }
+        }
       }
     });
   }
 
+  static loadArticlePreviewData(page, itemCount, callback) {
+    getRequest(`/news/previews/${page}?itemsPerPage=${itemCount}`).then(
+      (res) => {
+        callback(res, page, itemCount);
+      }
+    );
+  }
+
   static newPage() {
     if (Client.getCurrentPage() === "aktuelles/newPage") {
-      let articleTitle = document.getElementById("articleTitle");
+      let articleTitle = document.getElementById("article-title");
       let articleContent = document.getElementById("articleContent");
-      let articleDate = document.getElementById("articleDate");
-      let articlePhotos = document.getElementById("addPhotos");
+      let articleDate = document.getElementById("article-date");
+      let articlePhotos = document.getElementById("add-photos");
+      let articlePreviewDescription = document.getElementById(
+        "preview-description"
+      );
       if (
         Client.validateNewArticle(
           articleTitle,
           articleContent,
           articleDate,
-          articlePhotos
+          articlePhotos,
+          articlePreviewDescription
         )
       ) {
         if (getCookie("isAuthorized") === "true") {
@@ -378,31 +320,28 @@ class Server {
   }
 
   static fetchNewPage() {
-    let title = document.getElementById("articleTitle").value;
+    let title = document.getElementById("article-title").value;
+    let date = document.getElementById("article-date").value;
     let content = document.getElementById("articleContent").value;
-    let date = document.getElementById("articleDate").value;
 
-    let files = document.getElementById("imgUploadInput").files;
+    let files = document.getElementById("img-upload-input").files;
+    let previewDescription = document.getElementById(
+      "preview-description"
+    ).value;
     let fileNames = [];
 
     for (let i = 0; i < files.length; i++) {
       fileNames.push(files[i].name);
     }
     Ui.loadScreen();
-    fetch(host + "/api/newPage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        date: date,
-        fileNames: fileNames,
-        previewFile: _previewImageName,
-      }),
+    postRequest("/newPage", {
+      title: title,
+      content: content,
+      date: date,
+      fileNames: fileNames,
+      previewFile: _previewImageName,
+      previewDescription,
     })
-      .then((response) => response.json())
       .then((data) => {
         let paths = data.paths;
 
@@ -435,16 +374,13 @@ class Server {
       path = pathForPreviewImage.join("/");
     }
     path += ".jpeg";
-    return fetch(host + "/api/uploadImage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fileData: fileData,
-        path: path,
-      }),
-    }).then((response) => response.json());
+    postRequest("/uploadImage", { fileData: fileData, path: path })
+      .then((res) => {
+        console.log("Image(s) was successfully uploaded:", res);
+      })
+      .catch((err) => {
+        console.log("Error while uploading the image(s):", res);
+      });
   }
 
   static onEditPage(path) {
@@ -459,27 +395,23 @@ class Server {
       let articleTitle = document.getElementById("editArticleTitle");
       let articleContent = document.querySelector(".trumbowyg-editor");
       let articleDate = document.getElementById("editArticleDate");
+      let articlePreview = document.getElementById("previewText");
       if (
         Client.validateNewArticle(
           articleTitle,
           articleContent,
           articleDate,
-          true
+          true,
+          articlePreview
         )
       ) {
-        fetch(host + "/api/editPage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            articleTitle: articleTitle.value,
-            articleContent: articleContent.innerHTML,
-            articleDate: articleDate.value,
-            editArticlePath: _editArticlePath,
-          }),
+        postRequest("/editPage", {
+          articleTitle: articleTitle.value,
+          articleContent: articleContent.innerHTML,
+          articleDate: articleDate.value,
+          editArticlePath: _editArticlePath,
+          articlePreview: articlePreview.value,
         })
-          .then((response) => response.json())
           .then(() => {
             Client.returnToArticles();
           })
@@ -497,18 +429,63 @@ class Server {
     Ui.confirmDeleteWindow();
   }
 
+  static showDeleteList() {
+    const container = document.getElementById("alertPlaceholder");
+    const cards = document.querySelectorAll(".card");
+    if (cards) {
+      const html = `
+      <div class="modify-file-list-container"> 
+        <div class="header">
+          <h2>Welchen Artikel möchtest du löschen?</h2>
+          <button onclick="Ui.hideAuthorizationWindow()"> X </button>
+        </div>
+        <div class="modify-file-list">
+          ${Array.from(cards)
+            .map((card) => {
+              return `
+              <button onclick="Server.onDeletePage('${card.dataset.location}')">
+              ${card.querySelector("h3").innerHTML}
+              </button>
+            `;
+            })
+            .join("")}
+          </div>
+      </div>
+      `;
+      container.innerHTML = html;
+    }
+  }
+
+  static showEditList() {
+    const container = document.getElementById("alertPlaceholder");
+    const cards = document.querySelectorAll(".card");
+    if (cards) {
+      const html = `
+      <div class="modify-file-list-container"> 
+        <div class="header">
+          <h2>Welchen Artikel möchtest du bearbeiten?</h2>
+          <button onclick="Ui.hideAuthorizationWindow()"> X </button>
+        </div>
+        <div class="modify-file-list">
+          ${Array.from(cards)
+            .map((card) => {
+              return `
+              <button onclick="Server.onEditPage('${card.dataset.location}')">
+              ${card.querySelector("h3").innerHTML}
+              </button>
+            `;
+            })
+            .join("")}
+          </div>
+      </div>
+      `;
+      container.innerHTML = html;
+    }
+  }
+
   static deletePage(isAuthorized) {
     if (isAuthorized) {
-      fetch(host + "/api/deletePage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          deletePath: _deletePage,
-        }),
-      })
-        .then((response) => response.json())
+      postRequest("/deletePage", { deletePath: _deletePage })
         .then((res) => {
           Client.returnToArticles();
         })
@@ -521,23 +498,15 @@ class Server {
   }
 
   static loadStartPageArticlePreviews() {
-    fetch(host + "/api/startPageArticlePreviews", {
-      method: "GET",
-    })
-      .then((response) => response.json())
+    getRequest("/startPageArticlePreviews")
       .then((res) => {
-        let articleContainer = document.querySelectorAll(".newsItem");
-        if (articleContainer !== null) {
-          for (let i = 0; i < articleContainer.length; i++) {
-            articleContainer[i].querySelector(".image").innerHTML =
-              "<img src='" + res.data[i][0] + "'>";
-            articleContainer[i].querySelector(".title").innerHTML =
-              res.data[i][1];
-            articleContainer[i].onclick = function () {
-              navigate(res.data[i][2] + " content");
-            };
-          }
-        }
+        const news = document.getElementById("articles");
+        news.innerHTML = `
+        <h2 class="title">Aktuelles:</h2>
+          <div class="card-container">
+          ${res.data.join("")}
+          </div>
+        `;
       })
       .catch((err) => {
         console.log("Error while trying to delete Article", err);
@@ -545,10 +514,7 @@ class Server {
   }
 
   static loadAllGames(callback) {
-    fetch(host + "/api/allGames/", {
-      method: "GET", // Send password to server in fetch request body
-    })
-      .then((response) => response.json())
+    getRequest("/allGames")
       .then((data) => {
         callback(data);
       })
@@ -556,10 +522,7 @@ class Server {
   }
 
   static getNextImages(imgCount) {
-    fetch(host + "/api/nextImages?c=" + imgCount + "", {
-      method: "GET",
-    })
-      .then((response) => response.json())
+    getRequest(`/nextImages?c=${imgCount}`)
       .then((res) => {
         let imagesPc = JSON.parse(Client.loadLocalStorage("imagesPc"));
         let imagesMobile = JSON.parse(Client.loadLocalStorage("imagesMobile"));
@@ -629,10 +592,7 @@ class Server {
   }
 
   static copyMail(mailto) {
-    fetch(host + "/api/getMail?mail=" + mailto, {
-      method: "GET", // Send password to server in fetch request body
-    })
-      .then((response) => response.json())
+    getRequest(`/getMail?mail=${mailto}`)
       .then((data) => {
         Client.copyTextToClipboard(data);
         const div = document.getElementById("alertPlaceholder");
@@ -653,10 +613,7 @@ class Server {
   }
 
   static setMail(mailto) {
-    fetch(host + "/api/getMail?mail=" + mailto, {
-      method: "GET", // Send password to server in fetch request body
-    })
-      .then((response) => response.json())
+    getRequest(`/getMail?mail=${mailto}`)
       .then((data) => {
         document.getElementById(mailto).innerHTML = mailto + ": " + data;
       })
@@ -719,7 +676,7 @@ class Client {
   static pasteAktuellesData() {
     let articlesDataDom = document.getElementById("newsArticlesData");
     if (articlesDataDom !== null) {
-      let newsContent = document.getElementById("newsContent");
+      let newsContent = document.querySelector(".card-container");
       if (newsContent !== null) {
         newsContent.innerHTML = articlesDataDom.value;
       }
@@ -754,7 +711,7 @@ class Client {
     if (Client.getCurrentPage() === "aktuelles/aktuelles") {
       const canLeft = page <= 0;
       const canRight = page >= Math.trunc((data.dirCount - 1) / itemCount);
-      document.getElementById("newsContent").innerHTML = contentHTML;
+      document.querySelector(".card-container").innerHTML = contentHTML;
       document.getElementById("newsNavigation").innerHTML =
         "<button id='leftArticleButton'" +
         (canLeft ? "disabled" : "") +
@@ -830,7 +787,7 @@ class Client {
           }
           pageInfo.currentPage = pageInfo.currentPage + 1;
           articlesDom.value = pageInfo;
-          window.scrollTo(0, 500);
+          window.scrollTo(0, 700);
 
           Client.insertAktuellesData(data, page, itemCount);
         }
@@ -848,9 +805,9 @@ class Client {
 
   static textStorageInterval() {
     if (Client.getCurrentPage() === "aktuelles/newPage") {
-      let articleTitle = document.getElementById("articleTitle").value;
+      let articleTitle = document.getElementById("article-title").value;
       let articleContent = document.getElementById("articleContent").value;
-      let articleDate = document.getElementById("articleDate").value;
+      let articleDate = document.getElementById("article-date").value;
       let json = JSON.stringify({ articleTitle, articleContent, articleDate });
       Client.saveLocalStorage("newArticleData", json);
       setTimeout(Client.textStorageInterval, 5000);
@@ -865,9 +822,9 @@ class Client {
         let articleTitle = data.articleTitle;
         let articleContent = data.articleContent;
         let articleDate = data.articleDate;
-        document.getElementById("articleTitle").value = articleTitle;
+        document.getElementById("article-title").value = articleTitle;
         document.getElementById("articleContent").value = articleContent;
-        document.getElementById("articleDate").value = articleDate;
+        document.getElementById("article-date").value = articleDate;
       } catch (e) {
         console.log("Error while loading the written Text: ", e);
       }
@@ -878,7 +835,8 @@ class Client {
     articleTitle,
     articleContent,
     articleDate,
-    articlePhotos
+    articlePhotos,
+    articlePreviewDescription
   ) {
     if (articleTitle.value === "") {
       _validateNewArticleErrorMessage = "Bitte füge einen Titel hinzu!";
@@ -891,8 +849,11 @@ class Client {
       return false;
     } else if (articlePhotos === true) {
       return true;
-    } else if (articlePhotos.querySelector("#uploadIcon") !== null) {
+    } else if (articlePhotos.querySelector("#file-list") === null) {
       _validateNewArticleErrorMessage = "Bitte lade mindestens ein Bild hoch!";
+      return false;
+    } else if (articlePreviewDescription.value === "") {
+      _validateNewArticleErrorMessage = "Bitte füge einen Vorschautext hinzu!";
       return false;
     } else {
       return true;
@@ -919,19 +880,19 @@ class Client {
   }
 
   static triggerFileInput() {
-    let imgUpload = document.getElementById("imgUploadInput");
+    let imgUpload = document.getElementById("img-upload-input");
     if (imgUpload != null) {
       imgUpload.click();
     }
   }
 
   static displaySelectedFiles() {
-    document.getElementById("uploadIcon").innerHTML =
+    document.getElementById("add-photos").innerHTML =
       "<img id='loadAnimation' src='images/icons/load.gif'>";
 
-    let imgUpload = document.getElementById("imgUploadInput").files;
+    let imgUpload = document.getElementById("img-upload-input").files;
 
-    let html = "<div id='fileList'>";
+    let html = "<div id='file-list'>";
 
     let promises = [];
 
@@ -955,14 +916,14 @@ class Client {
     Promise.all(promises)
       .then((imageDataArray) => {
         for (let i = 0; i < imgUpload.length; i++) {
-          html += "<div class='imagePreview'>";
+          html += "<div class='image-preview'>";
           html += "<img src='" + imageDataArray[i] + "'>";
           html += "<p>" + imgUpload[i].name + "</p>";
           html += "</div>";
         }
         html += "</div>";
 
-        document.getElementById("addPhotos").innerHTML = html;
+        document.getElementById("add-photos").innerHTML = html;
       })
       .catch((err) => {
         console.log("Fehler beim anzeigen des Bildes:", err);
@@ -1003,48 +964,13 @@ class Client {
   }
 
   static showEditButtons() {
-    let previews = document.querySelectorAll(".newsPreview");
-
-    for (let i = 0; i < previews.length; i++) {
-      let navigationPath =
-        "aktuelles " + previews[i].getAttribute("data-location");
-      let editButtons = document.createElement("div");
-      editButtons.setAttribute("class", "editButtonsContainer");
-      editButtons.innerHTML =
-        "<button class='newsPreviewEditButton' type='button' onclick='Server.onEditPage(\"" +
-        navigationPath +
-        "\")'> <img src='/images/icons/pencil.svg'> </button>" +
-        "<button class='newsPreviewDeleteButton' type='button' onclick='Server.onDeletePage(\"" +
-        navigationPath +
-        "\")'> <img src='/images/icons/trash.svg'> </button>";
-      previews[i].parentNode.insertBefore(editButtons, previews[i]);
-    }
+    let modifyButtons = document.getElementById("modify-buttons");
+    modifyButtons.innerHTML = `
+      <button onclick="Server.showDeleteList()">Löschen</button>
+      <button onclick="Server.showEditList()">Bearbeiten</button>
+    `;
   }
 
-  static openHamburgerMenu() {
-    Ui.setScroll(false);
-    if (_hamburgerContent === "") {
-      let navItems = document.querySelectorAll(".navContainer li");
-
-      let hamburgerWrapper = document.createElement("div");
-      hamburgerWrapper.id = "hamburgerMenuWrapper";
-
-      let hamburger = document.createElement("ul");
-      hamburger.id = "hamburgerMenu";
-
-      for (let i = 0; i < navItems.length; i++) {
-        hamburger.appendChild(navItems[i]);
-      }
-
-      hamburgerWrapper.appendChild(hamburger);
-
-      let input = document.getElementById("alertPlaceholder");
-      input.appendChild(hamburgerWrapper);
-      _hamburgerContent = input.innerHTML;
-    } else {
-      document.getElementById("alertPlaceholder").innerHTML = _hamburgerContent;
-    }
-  }
   static fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -1082,6 +1008,12 @@ class Client {
       }
     );
   }
+  static openHamburgerMenu() {
+    document.querySelector("nav").classList = "navMobile";
+  }
+  static closeHamburgerMenu() {
+    document.querySelector("nav").classList = "nav";
+  }
 }
 
 class Ui {
@@ -1110,14 +1042,21 @@ class Ui {
   }
 
   static selectPreviewImage() {
-    let pasteImages = document.getElementById("fileList").innerHTML;
+    let pasteImages = document.getElementById("file-list").innerHTML;
 
-    document.getElementById("alertPlaceholder").innerHTML =
-      "<div id='authorizationWindowContainer'> <div id='selectPreviewImageContainer'> <h4>Welches Bild soll als Artikelvorschau genutzt werden?</h4>" +
-      pasteImages +
-      "</div></div>";
+    document.getElementById(
+      "alertPlaceholder"
+    ).innerHTML = `<div id='authorizationWindowContainer'> 
+        <div id='selectPreviewImageContainer'>
+          <h2>Welches Bild soll als Artikelvorschau genutzt werden?</h2>
+          <div class='file-list'> 
+            ${pasteImages}
+          </div>
+        </div>
+      </div>`;
+
     let imagePreviews = document.querySelectorAll(
-      "#authorizationWindowContainer .imagePreview"
+      "#authorizationWindowContainer .image-preview"
     );
 
     for (let i = 0; i < imagePreviews.length; i++) {
@@ -1145,7 +1084,7 @@ class Ui {
       "<div id='authorizationWindowContainer'>" +
       "<div id='authorizationWindow'>" +
       "<p id='authorizationWindowInfo'>Möchtest du wirklich den gewählten Artikel löschen?</p>" +
-      "<input id='authorizationWindowSubmit' type='button' value='Löschen' onclick='Ui.confirmDelete()'/>" +
+      `<input id='authorizationWindowSubmit' type='button' value='Löschen' onclick='Ui.confirmDelete()'/>` +
       "<input id='authorizationWindowCancel' type='button' value='Abbrechen' onclick='Ui.hideAuthorizationWindow()'/>" +
       "</div></div>";
   }

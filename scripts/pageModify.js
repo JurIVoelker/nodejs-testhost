@@ -92,7 +92,7 @@ class PageModify {
         directories.reverse();
         directories = directories.slice(
           0,
-          directories.length >= 4 ? 4 : directories.length
+          directories.length >= 3 ? 3 : directories.length
         );
 
         let promises = [];
@@ -107,15 +107,7 @@ class PageModify {
                   if (err) {
                     reject("Error reading the HTML file:", err);
                   } else {
-                    const jsdom = require("jsdom");
-                    const doc = new jsdom.JSDOM(data);
-                    let title =
-                      doc.window.document.querySelector(".newsTitle").innerHTML;
-                    resolve([
-                      "pages/aktuelles/" + directories[i] + "/preview.jpeg",
-                      title,
-                      "aktuelles " + directories[i],
-                    ]);
+                    resolve(data);
                   }
                 }
               );
@@ -163,41 +155,29 @@ class PageModify {
     }
   }
 
-  static createPreview(path, title, date, content) {
+  static createPreview(path, title, date, previewDescription) {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = path.split("/");
-        previewImagePath.shift();
-        previewImagePath.shift();
-        previewImagePath.shift();
-        let navigationPath = previewImagePath[previewImagePath.length - 1];
-        previewImagePath = previewImagePath.join("/") + "/preview.jpeg";
-        let htmlContent =
-          "<div class='newsPreview' data-location='" +
-          navigationPath +
-          "' onClick='navigate(\"aktuelles " +
-          navigationPath +
-          " content\")'>" +
-          '<div class="previewImage"><img src="' +
-          previewImagePath +
-          '" alt="Vorschaubild"></div>' +
-          '<div class="previewContent">' +
-          '<div class="text">' +
-          '<h4 class="newsTitle">' +
-          title +
-          "</h4>" +
-          "<p>" +
-          content +
-          "</p>" +
-          "</div>" +
-          '<p class="date">' +
-          date +
-          "</p>" +
-          '<div class="readMoreGradient"></div>' +
-          '<a class="readMoreText">Mehr lesen...</a>' +
-          "</div>" +
-          "</div>";
-        this.writeFile(path, htmlContent, "/preview.html");
+        console.log(previewImagePath);
+        let navigationPath = previewImagePath[1];
+        previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
+
+        let html = `
+          <div class="card" data-location="${navigationPath}" onClick="navigate('aktuelles ${navigationPath} content')">
+            <div class="image">
+              <img src="${previewImagePath}" alt="Vorschau Bild">
+            </div> 
+            <div class="content">
+              <div class="text-content">
+                <h3 class="title">${title}</h3>
+                <p class="text">${previewDescription}</p>
+              </div>
+              <p class="date">${date}</p>
+            </div>
+          </div>
+        `;
+        this.writeFile(path, html, "/preview.html");
         resolve();
       } catch (e) {
         reject(e);
@@ -205,7 +185,31 @@ class PageModify {
     });
   }
 
-  static newArticle(title, content, date, fileNames, previewFile) {
+  static newArticle(
+    title,
+    content,
+    date,
+    fileNames,
+    previewFile,
+    previewDescription
+  ) {
+    if (
+      !title ||
+      !content ||
+      !date ||
+      !fileNames ||
+      !previewFile ||
+      !previewDescription
+    ) {
+      throw new Error(`Not all props defined: 
+      title: ${title}
+      content: ${content}
+      date: ${date}
+      fileNames: ${fileNames}
+      previewFile: ${previewFile}
+      previewDescription: ${previewDescription}
+      `);
+    }
     return new Promise((resolve, reject) => {
       let filePath =
         path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
@@ -215,6 +219,7 @@ class PageModify {
         if (err) {
           reject("Fehler beim Lesen des Verzeichnisses:", err);
         }
+        console.log(filePath);
 
         let directories = files
           .filter((dirent) => dirent.isDirectory())
@@ -239,7 +244,7 @@ class PageModify {
                 filePath + newDirectoryName,
                 title,
                 date,
-                content
+                previewDescription
               ),
               PageModify.createPage(
                 filePath + newDirectoryName,
@@ -272,7 +277,7 @@ class PageModify {
   static writeFile(path, htmlContent, fileName) {
     let fs = require("fs");
     fs.writeFile(path + fileName, htmlContent, (error) => {
-      /* handle error */
+      console.log(error);
     });
   }
 
@@ -291,11 +296,11 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = path.split("/");
-        previewImagePath.shift();
-        previewImagePath.shift();
-        previewImagePath.shift();
-        let imgPath = previewImagePath.join("/");
-        previewImagePath = previewImagePath.join("/") + "/preview.jpeg";
+        console.log(previewImagePath);
+        let navigationPath = previewImagePath[1];
+        previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
+
+        let imgPath = `pages/aktuelles/${navigationPath}`;
 
         let images = [[""], [""], [""]];
 
@@ -345,11 +350,14 @@ class PageModify {
     });
   }
 
-  static deleteArticle(path) {
+  static deleteArticle(filePath) {
     return new Promise((resolve, reject) => {
-      path = path.replace(" ", "/");
+      filePath = filePath.replace(" ", "/");
       let folderPath =
-        path.join(__dirname, "..", "public", "pages") + "/" + path;
+        path.join(__dirname, "..", "public", "pages", "aktuelles") +
+        "/" +
+        filePath;
+      console.log(folderPath);
       try {
         fs.rmSync(folderPath, { recursive: true, force: true });
         resolve();
@@ -363,9 +371,17 @@ class PageModify {
     articleTitle,
     articleContent,
     articleDate,
-    editArticlePath
+    editArticlePath,
+    articlePreview
   ) {
-    let filePath = editArticlePath.replace(" ", "/");
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "public",
+      "pages",
+      "aktuelles",
+      editArticlePath
+    );
     return new Promise((resolve, reject) => {
       this.loadPage(filePath + "/content.html", (err, data) => {
         if (err) {
@@ -379,7 +395,7 @@ class PageModify {
           doc.window.document.querySelector(".textWrap").innerHTML =
             "<img src='" + imgSrc + "'>" + articleContent;
           this.writeFile(
-            "./public/pages/" + filePath + "/",
+            filePath + "/",
             doc.window.document.documentElement.innerHTML,
             "content.html"
           );
@@ -389,16 +405,15 @@ class PageModify {
               reject(err);
             } else {
               let doc2 = new jsdom.JSDOM(data);
-              doc2.window.document.querySelector("h4").innerHTML = articleTitle;
+              doc2.window.document.querySelector("h3").innerHTML = articleTitle;
               doc2.window.document.querySelector(".date").innerHTML =
                 articleDate;
-              doc2.window.document.querySelector(".text").innerHTML =
-                "<h4 class='newsTitle'>" +
-                articleTitle +
-                "</h4>" +
-                articleContent;
+              if (articlePreview !== "[unverändert]") {
+                doc2.window.document.querySelector(".text").innerHTML =
+                  articlePreview;
+              }
               this.writeFile(
-                "./public/pages/" + filePath + "/",
+                filePath + "/",
                 doc2.window.document.documentElement.innerHTML,
                 "preview.html"
               );

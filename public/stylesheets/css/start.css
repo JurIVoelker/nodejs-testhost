@@ -1,0 +1,246 @@
+#startText {
+  padding: 40px;
+  max-width: 1400px;
+  height: 460px;
+  display: flex;
+  justify-content: space-around;
+  gap: 40px;
+}
+#startText #start-img-container img,
+#startText img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+#startText .text_content {
+  flex: 0 0 600px;
+}
+@media only screen and (max-width: 768px) {
+  #startText {
+    height: auto;
+    display: block;
+    padding: 0;
+  }
+  #startText .text_content {
+    padding: 40px;
+  }
+  #startText img {
+    border-radius: 0;
+  }
+}
+
+#infoBoxes {
+  padding-top: 40px;
+  max-width: 1400px;
+}
+@media only screen and (max-width: 768px) {
+  #infoBoxes h2 {
+    text-align: center;
+  }
+}
+#infoBoxes .card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+#infoBoxes .card-container .card {
+  display: grid;
+}
+#infoBoxes .card-container .card .learn-more {
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #6b8dcb;
+  color: #6b8dcb;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  width: calc(100% - 80px);
+  margin-left: 40px;
+  grid-row: 3;
+  align-self: end;
+  margin-bottom: 40px;
+}
+#infoBoxes .card-container .card .learn-more:hover {
+  cursor: pointer;
+}
+#infoBoxes .card-container .card .content {
+  align-self: start;
+  grid-row: 2;
+  padding: 20px 40px 10px 40px !important;
+}
+@media only screen and (max-width: 768px) {
+  #infoBoxes .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+#infoBoxes .card-container .card {
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  border-radius: 10px;
+  height: auto;
+}
+@media only screen and (max-width: 768px) {
+  #infoBoxes .card-container .card {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
+#infoBoxes .card-container .card .image img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  max-height: 350px;
+  object-fit: cover;
+}
+#infoBoxes .card-container .card .content {
+  padding: 20px 40px 40px 40px;
+}
+#infoBoxes .card-container .card .content .title {
+  color: #2c3966;
+}
+#infoBoxes .card-container .card .content .text {
+  color: rgb(107, 105, 124);
+}
+
+#articles {
+  padding-top: 40px;
+  padding-bottom: 80px;
+  max-width: 1400px;
+}
+@media only screen and (max-width: 768px) {
+  #articles h2 {
+    text-align: center;
+  }
+}
+#articles .title {
+  color: #6b8dcb;
+}
+#articles .card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+@media only screen and (max-width: 768px) {
+  #articles .card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+#articles .card-container .card {
+  box-shadow: 0 5px 15px rgba(83, 83, 83, 0.24);
+  border-radius: 10px;
+  height: auto;
+}
+@media only screen and (max-width: 768px) {
+  #articles .card-container .card {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
+#articles .card-container .card .image img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  max-height: 350px;
+  object-fit: cover;
+}
+#articles .card-container .card .content {
+  padding: 20px 40px 40px 40px;
+}
+#articles .card-container .card .content .title {
+  color: #2c3966;
+}
+#articles .card-container .card .content .text {
+  color: rgb(107, 105, 124);
+}
+
+#nextGames {
+  max-width: 1700px;
+  padding: 40px 0 40px 0;
+  width: 100%;
+}
+#nextGames table {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 0 40px 0 40px;
+}
+#nextGames table h3 {
+  color: #2c3966;
+}
+#nextGames table .bigRow {
+  height: 70px;
+}
+#nextGames table .row {
+  height: 60px;
+}
+#nextGames table .rankingContainer {
+  display: flex;
+  align-items: center;
+}
+#nextGames table .ranking p {
+  text-align: center;
+  color: white;
+  width: var(--1xDist);
+}
+#nextGames table .ranking[data-bg=bronze] {
+  background-color: #b4764a;
+}
+#nextGames table .ranking[data-bg=silver] {
+  background-color: #989892;
+}
+#nextGames table .ranking[data-bg=gold] {
+  background-color: #c9a31a;
+}
+#nextGames table .ranking[data-bg=other] {
+  background-color: rgba(30, 31, 34, 0.66);
+}
+#nextGames table .ranking {
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  margin: 0 10px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+  #newsWrapper {
+
+    .newsItem {
+      .image {
+        height: 300px;
+        img {
+          height: 300px;
+          width: 100%;
+          border-radius: $border-radius $border-radius 0 0;
+          @include size-s {
+            border-radius: 0;
+          }
+          object-fit: cover;
+        }
+      }
+      background-color: $primary;
+      border-radius: $border-radius;
+      text-align: center;
+
+      h3 {
+        font-weight: 500;
+        color: white;
+        text-decoration: underline;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    @include size-s {
+      display: block;
+      .newsItem {
+        padding-bottom: 10px;
+        border-radius: 0;
+      }
+    }
+  }*//*# sourceMappingURL=start.css.map */
