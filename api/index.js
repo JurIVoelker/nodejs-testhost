@@ -1,8 +1,8 @@
-require("dotenv").config();
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+
+const publicFilePrefix = "/public"
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -48,25 +48,25 @@ app.get("/", (req, res) => {
       <head>
           <meta charset="UTF-8"/>
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="/stylesheets/css/main.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/start.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/training.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/trainer.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/halle.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/naechste-spiele.css"/>
-          <script src="javascripts/js.js"></script>
-          <script src="javascripts/navigator.js"></script>
-          <script src="javascripts/cookieManager.js"></script>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/main.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/start.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/notAvailable.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/training.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/aktuelles.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/trainer.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/mannschaften.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/halle.css"/>
+          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/naechste-spiele.css"/>
+          <script src="${publicFilePrefix}/javascripts/js.js"></script>
+          <script src="${publicFilePrefix}/javascripts/navigator.js"></script>
+          <script src="${publicFilePrefix}/javascripts/cookieManager.js"></script>
         
           <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
       
-          <link rel="stylesheet" href="trumbowyg/dist/ui/trumbowyg.min.css">
+          <link rel="stylesheet" href="${publicFilePrefix}trumbowyg/dist/ui/trumbowyg.min.css">
       
       </head>
       <body>
