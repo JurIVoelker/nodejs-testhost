@@ -70,11 +70,11 @@ app.get("/", (req, res) => {
       
       </head>
       <body>
-      <div id="banner"><img src="/images/images/title.jpg"></div>
+      <div id="banner"><img src="${publicFilePrefix}/images/images/title.jpg"></div>
       
       
       <nav class="nav">
-          <button id="hamburger" onclick="Client.openHamburgerMenu()"><img src="images/icons/hamburger_menu.svg"></button>
+          <button id="hamburger" onclick="Client.openHamburgerMenu()"><img src="${publicFilePrefix}images/icons/hamburger_menu.svg"></button>
           <ul class="navContainer">
               <li class="noDropdown" onclick="navigate('start start');"><input type="button" value="Start"/></li>
               <li class="dropdown">Verein
@@ -137,8 +137,8 @@ app.get("/", (req, res) => {
       <footer>
           <br>
           <div id="logosContainer">
-              <div id="logos"><img src="images/logos/logo_ttc_farbig.png" alt="Logo TTC Klingenmünster"><img
-                          src="images/logos/logo_joola.png" alt="Logo Joola"></div>
+              <div id="logos"><img src="${publicFilePrefix}images/logos/logo_ttc_farbig.png" alt="Logo TTC Klingenmünster"><img
+                          src="${publicFilePrefix}images/logos/logo_joola.png" alt="Logo Joola"></div>
           </div>
           <p id="copyright" onclick="navigate('login')">© 2023 TTC Klingenmünster </p>
       </footer>
@@ -146,8 +146,8 @@ app.get("/", (req, res) => {
       <div id="alertPlaceholder"></div>
       
       <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script></script>
-      <script src="trumbowyg/dist/trumbowyg.min.js"></script>
+      <script>window.jQuery || document.write('<script src="${publicFilePrefix}js/vendor/jquery-3.3.1.min.js"><\/script></script>
+      <script src="${publicFilePrefix}trumbowyg/dist/trumbowyg.min.js"></script>
       
       </body>
       
