@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -13,6 +11,7 @@ app.use(
 );
 
 app.use(express.static("public"));
+app.use(cors());
 
 // Create application/x-www-form-urlencoded parser
 const logger = require("morgan");
@@ -48,7 +47,7 @@ app.get("/", (req, res) => {
       <head>
           <meta charset="UTF-8"/>
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="/stylesheets/css/main.css"/>
+          <link rel="stylesheet" href="public/stylesheets/css/main.css"/>
           <link rel="stylesheet" href="/stylesheets/css/start.css"/>
           <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
           <link rel="stylesheet" href="/stylesheets/css/training.css"/>
@@ -70,7 +69,7 @@ app.get("/", (req, res) => {
       
       </head>
       <body>
-      <div id="banner"><img src="/images/images/title.jpg"></div>
+      <div id="banner"><img src="public/images/images/title.jpg"></div>
       
       
       <nav class="nav">
