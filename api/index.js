@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const locationPrefix = "/public";
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -47,18 +48,18 @@ app.get("/", (req, res) => {
       <head>
           <meta charset="UTF-8"/>
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="public/stylesheets/css/main.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/start.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/training.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/trainer.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/halle.css"/>
-          <link rel="stylesheet" href="/stylesheets/css/naechste-spiele.css"/>
-          <script src="javascripts/js.js"></script>
-          <script src="javascripts/navigator.js"></script>
-          <script src="javascripts/cookieManager.js"></script>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/main.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/start.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/notAvailable.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/training.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/aktuelles.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/trainer.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/mannschaften.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/halle.css"/>
+          <link rel="stylesheet" href="${locationPrefix}/stylesheets/css/naechste-spiele.css"/>
+          <script src="${locationPrefix}/javascripts/js.js"></script>
+          <script src="${locationPrefix}/javascripts/navigator.js"></script>
+          <script src="${locationPrefix}/javascripts/cookieManager.js"></script>
         
           <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
