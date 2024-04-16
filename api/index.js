@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-require('dotenv').config();
 const publicFilePrefix = "/public"
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -20,6 +19,7 @@ app.use(logger("dev"));
 app.use(express.json());
 
 const path = require("path");
+require('dotenv').config({ path: path.join(__dirname, "..", ".env") });
 //Scripts
 const PageModify = require("../scripts/pageModify.js");
 const TTC = require("../scripts/TTC.js");
@@ -187,7 +187,7 @@ app.post("/api/navigation/:id", (req, res) => {
 app.post("/api/login", (req, res) => {
   // API request for loading other pages
   let password = req.body.password;
-
+  res.json(process.env.PASSWORD);
   if (password == process.env.PASSWORD) {
     res.json({ content: "Login erfolgreich", isLoggedin: "true" }); // Else: return HTML content to index.ejs
   } else {
