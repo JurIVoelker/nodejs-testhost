@@ -1,4 +1,4 @@
-const host = "http://localhost:3000";
+const host = window.location.hostname === "localhost" ? 'http://localhost:3000' : window.location.hostname;
 
 
 // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
