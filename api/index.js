@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const mime = require("mime-types");
 
 const publicFilePrefix = "/public"
 
@@ -11,8 +12,6 @@ app.use(
     extended: true,
   })
 );
-
-app.use(express.static("public"));
 
 // Create application/x-www-form-urlencoded parser
 const logger = require("morgan");
@@ -48,33 +47,33 @@ app.get("/", (req, res) => {
       <head>
           <meta charset="UTF-8"/>
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/main.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/start.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/notAvailable.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/training.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/aktuelles.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/trainer.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/mannschaften.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/halle.css"/>
-          <link rel="stylesheet" href="${publicFilePrefix}/stylesheets/css/naechste-spiele.css"/>
-          <script src="${publicFilePrefix}/javascripts/js.js"></script>
-          <script src="${publicFilePrefix}/javascripts/navigator.js"></script>
-          <script src="${publicFilePrefix}/javascripts/cookieManager.js"></script>
+          <link rel="stylesheet" href="/stylesheets/css/main.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/start.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/notAvailable.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/training.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/aktuelles.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/trainer.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/halle.css"/>
+          <link rel="stylesheet" href="/stylesheets/css/naechste-spiele.css"/>
+          <script src="/javascripts/js.js"></script>
+          <script src="/javascripts/navigator.js"></script>
+          <script src="/javascripts/cookieManager.js"></script>
         
           <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
       
-          <link rel="stylesheet" href="${publicFilePrefix}trumbowyg/dist/ui/trumbowyg.min.css">
+          <link rel="stylesheet" href="trumbowyg/dist/ui/trumbowyg.min.css">
       
       </head>
       <body>
-      <div id="banner"><img src="${publicFilePrefix}/images/images/title.jpg"></div>
+      <div id="banner"><img src="/images/images/title.jpg"></div>
       
       
       <nav class="nav">
-          <button id="hamburger" onclick="Client.openHamburgerMenu()"><img src="${publicFilePrefix}images/icons/hamburger_menu.svg"></button>
+          <button id="hamburger" onclick="Client.openHamburgerMenu()"><img src="images/icons/hamburger_menu.svg"></button>
           <ul class="navContainer">
               <li class="noDropdown" onclick="navigate('start start');"><input type="button" value="Start"/></li>
               <li class="dropdown">Verein
@@ -137,8 +136,8 @@ app.get("/", (req, res) => {
       <footer>
           <br>
           <div id="logosContainer">
-              <div id="logos"><img src="${publicFilePrefix}images/logos/logo_ttc_farbig.png" alt="Logo TTC Klingenmünster"><img
-                          src="${publicFilePrefix}images/logos/logo_joola.png" alt="Logo Joola"></div>
+              <div id="logos"><img src="images/logos/logo_ttc_farbig.png" alt="Logo TTC Klingenmünster"><img
+                          src="images/logos/logo_joola.png" alt="Logo Joola"></div>
           </div>
           <p id="copyright" onclick="navigate('login')">© 2023 TTC Klingenmünster </p>
       </footer>
@@ -146,8 +145,8 @@ app.get("/", (req, res) => {
       <div id="alertPlaceholder"></div>
       
       <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script>window.jQuery || document.write('<script src="${publicFilePrefix}js/vendor/jquery-3.3.1.min.js"><\/script></script>
-      <script src="${publicFilePrefix}trumbowyg/dist/trumbowyg.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script></script>
+      <script src="trumbowyg/dist/trumbowyg.min.js"></script>
       
       </body>
       
@@ -423,6 +422,17 @@ app.get("/api/getMail", (req, res) => {
       res.json("ERROR");
   }
 });
+
+app.use((req, res) => {
+  const filePath = (path.join(__dirname, "..", "public")+req.path).split("/").join("\\");
+  const error404 = (path.join(__dirname, "..", "public", "pages")+"\\error404.html");
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).sendFile(error404);
+  }
+});
+
 
 app.listen(3000, () => console.log("Server ready on port 3000."));
 
