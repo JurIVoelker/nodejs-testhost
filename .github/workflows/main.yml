@@ -1,0 +1,26 @@
+name: Git Pull and PM2 Restart
+
+on:
+  push:
+    branches:
+      - main  # Adjust this branch name as needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Reset to HEAD
+      run: git reset --hard HEAD
+
+    - name: Pull Latest Changes
+      run: git pull
+
+    - name: Install PM2
+      run: npm install pm2 -g
+
+    - name: Restart PM2
+      run: pm2 restart all
