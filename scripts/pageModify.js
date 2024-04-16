@@ -1,12 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-
-function log(message) {
-  const filePath = path.join(__dirname, "..", "logs", "logs.txt");
-  const logStream = fs.createWriteStream(filePath, { flags: 'a' });
-  logStream.write(`${message}\n`);
-  logStream.end();
-}
+const log = require('node-file-logger');
 
 class PageModify {
   static loadPage(filePath, callback) {
@@ -54,7 +48,6 @@ class PageModify {
   }
 
   static getPreviews(page, itemsPerPage, callback) {
-    log("test");
     let filePath =
       path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
 
@@ -169,8 +162,10 @@ class PageModify {
         let previewImagePath = filePath.split("/");
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
-        log("[createPreview - previewImagePath]: ", previewImagePath);
-        log("[createPreview - navigationPath]: ", navigationPath);
+        console.log("1:",previewImagePath);
+        console.log("2:",navigationPath);
+        log.Info("[createPreview - previewImagePath]: "+ previewImagePath);
+        log.Info("[createPreview - navigationPath]: "+ navigationPath);
 
         
         let html = `
