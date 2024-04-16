@@ -167,10 +167,11 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = filePath.split("/");
-        console.log(previewImagePath);
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
         log("[createPreview - previewImagePath]: ", previewImagePath);
+        log("[createPreview - navigationPath]: ", navigationPath);
+
         
         let html = `
           <div class="card" data-location="${navigationPath}" onClick="navigate('aktuelles ${navigationPath} content')">
