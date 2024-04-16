@@ -3,7 +3,7 @@ const path = require("path");
 const log = require('node-file-logger');
 
 const options = {
-  timeZone: 'America/Los_Angeles',
+  timeZone: 'Europe/Berlin',
   folderPath: path.join(__dirname, "..", "logs") + "/",      
   dateBasedFileNaming: true,
   // Required only if dateBasedFileNaming is set to false
