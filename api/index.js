@@ -425,7 +425,7 @@ app.get("/api/getMail", (req, res) => {
 
 app.use((req, res) => {
   const filePath = (path.join(__dirname, "..", "public")+req.path);
-  const error404 = (path.join(__dirname, "..", "public", "pages")+"\\error404.html");
+  const error404 = (path.join(__dirname, "..", "public", "pages")+"/error404.html");
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
