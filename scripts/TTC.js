@@ -204,7 +204,7 @@ class TTC {
     const time = new Date().getTime();
     const json = { validUntil: time, games: res };
     fs.writeFileSync(
-      path.join(__dirname, "..", "scripts") + "/" + fileName,
+      path.join(__dirname, "..", "scripts", fileName),
       JSON.stringify(json)
     );
   }

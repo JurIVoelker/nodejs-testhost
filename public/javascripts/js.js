@@ -1,6 +1,5 @@
-//const host = "https://nodejs-testhost.vercel.app";
-//const host = "http://localhost:3000";
-const host = "http://192.168.2.107:3000";
+const host = "http://localhost:3000";
+
 
 // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
 window.onscroll = function () {

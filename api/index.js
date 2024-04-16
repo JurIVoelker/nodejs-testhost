@@ -1,8 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const mime = require("mime-types");
 
+require('dotenv').config();
 const publicFilePrefix = "/public"
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -188,7 +188,7 @@ app.post("/api/login", (req, res) => {
   // API request for loading other pages
   let password = req.body.password;
 
-  if (password == "pass123") {
+  if (password == process.env.PASSWORD) {
     res.json({ content: "Login erfolgreich", isLoggedin: "true" }); // Else: return HTML content to index.ejs
   } else {
     res.json({ content: "Login fehlgeschlagen", isLoggedin: "false" });
@@ -200,9 +200,9 @@ app.post("/api/login", (req, res) => {
  */
 app.post("/api/authorize", (req, res) => {
   // API request for checking if is logged in
-  let password = "pass123"; // TODO Change
+  let password = process.env.PASSWORD; // TODO Change
 
-  if (password === "pass123") {
+  if (password === process.env.PASSWORD) {
     res.json({ isLoggedin: true });
   } else {
     res.json({ isLoggedin: false });
@@ -424,8 +424,8 @@ app.get("/api/getMail", (req, res) => {
 });
 
 app.use((req, res) => {
-  const filePath = (path.join(__dirname, "..", "public")+req.path);
-  const error404 = (path.join(__dirname, "..", "public", "pages")+"/error404.html");
+  const filePath = (path.join(__dirname, "..", "public", ...req.path.split("/")));
+  const error404 = (path.join(__dirname, "..", "public", "pages", "error404.html"));
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
