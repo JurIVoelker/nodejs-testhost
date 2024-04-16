@@ -13,14 +13,22 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Check if running on server
+      run: echo "Running on server"
+      if: ${{ secrets.IS_SERVER == 'true' }}
+
     - name: Reset to HEAD
       run: git reset --hard HEAD
+      if: secrets.IS_SERVER == 'true'
 
     - name: Pull Latest Changes
       run: git pull
+      if: secrets.IS_SERVER == 'true'
 
     - name: Install PM2
       run: npm install pm2 -g
+      if: secrets.IS_SERVER == 'true'
 
     - name: Restart PM2
       run: pm2 restart all
+      if: secrets.IS_SERVER == 'true'
