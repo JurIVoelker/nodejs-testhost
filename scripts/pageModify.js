@@ -1,6 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
+function log(message) {
+  const logStream = fs.createWriteStream('logs.txt', { flags: 'a' });
+  logStream.write(`${message}\n`);
+  logStream.end();
+}
+
 class PageModify {
   static loadPage(filePath, callback) {
     fs.readFile(filePath, "utf8", (err, data) => {
@@ -296,7 +302,6 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = path.split("/");
-        console.log(previewImagePath);
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
 
