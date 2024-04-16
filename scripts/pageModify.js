@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 function log(message) {
-  const logStream = fs.createWriteStream('logs.txt', { flags: 'a' });
+  const filePath = path.join(__dirname, "..", "logs", "logs.txt");
+  const logStream = fs.createWriteStream(filePath, { flags: 'a' });
   logStream.write(`${message}\n`);
   logStream.end();
 }
@@ -18,7 +19,7 @@ class PageModify {
       }
     });
   }
-
+ 
   static getNthNewsPage(index, isPreview, callback) {
     let filePath =
       path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
@@ -53,6 +54,7 @@ class PageModify {
   }
 
   static getPreviews(page, itemsPerPage, callback) {
+    log("test");
     let filePath =
       path.join(__dirname, "..", "public", "pages", "aktuelles") + "/";
 
