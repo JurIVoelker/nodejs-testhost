@@ -136,14 +136,14 @@ class PageModify {
     });
   }
 
-  static nextFile(path, fileName, dataCollection, callback, dirLength) {
+  static nextFile(filePath, fileName, dataCollection, callback, dirLength) {
     if (fileName.length <= 0) {
       callback(null, dataCollection, dirLength);
     } else {
-      fs.readFile(path + fileName[0] + "/preview.html", "utf8", (err, data) => {
+      fs.readFile(filePath + fileName[0] + "/preview.html", "utf8", (err, data) => {
         if (err) {
           this.nextFile(
-            path,
+            filePath,
             fileName.slice(1),
             dataCollection,
             callback,
@@ -152,7 +152,7 @@ class PageModify {
         } else {
           dataCollection.push(data);
           this.nextFile(
-            path,
+            filePath,
             fileName.slice(1),
             dataCollection,
             callback,
@@ -163,10 +163,10 @@ class PageModify {
     }
   }
 
-  static createPreview(path, title, date, previewDescription) {
+  static createPreview(filePath, title, date, previewDescription) {
     return new Promise((resolve, reject) => {
       try {
-        let previewImagePath = path.split("/");
+        let previewImagePath = filePath.split("/");
         console.log(previewImagePath);
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
@@ -185,7 +185,7 @@ class PageModify {
             </div>
           </div>
         `;
-        this.writeFile(path, html, "/preview.html");
+        this.writeFile(filePath, html, "/preview.html");
         resolve();
       } catch (e) {
         reject(e);
@@ -282,28 +282,28 @@ class PageModify {
     });
   }
 
-  static writeFile(path, htmlContent, fileName) {
+  static writeFile(filePath, htmlContent, fileName) {
     let fs = require("fs");
-    fs.writeFile(path + fileName, htmlContent, (error) => {
+    fs.writeFile(filePath + fileName, htmlContent, (error) => {
       console.log(error);
     });
   }
 
-  static saveImage(path, fileData) {
+  static saveImage(filePath, fileData) {
     //path = "./public/pages/aktuelles/test.jpeg"
     return new Promise((resolve, reject) => {
       const imageData = Buffer.from(fileData.split(";base64,").pop(), "base64");
-      fs.writeFile(path, imageData, (err) => {
+      fs.writeFile(filePath, imageData, (err) => {
         reject(err);
       });
-      resolve("Image successfully saved as " + path + "!");
+      resolve("Image successfully saved as " + filePath + "!");
     });
   }
 
-  static createPage(path, title, date, content, fileNames, previewFile) {
+  static createPage(filePath, title, date, content, fileNames, previewFile) {
     return new Promise((resolve, reject) => {
       try {
-        let previewImagePath = path.split("/");
+        let previewImagePath = filePath.split("/");
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
 
@@ -349,7 +349,7 @@ class PageModify {
           images[2] +
           "</div>" +
           "</div></div>";
-        this.writeFile(path, htmlContent, "/content.html");
+        this.writeFile(filePath, htmlContent, "/content.html");
         resolve();
       } catch (e) {
         reject(e);
