@@ -200,8 +200,7 @@ app.post("/api/login", (req, res) => {
  */
 app.post("/api/authorize", (req, res) => {
   // API request for checking if is logged in
-  let password = process.env.PASSWORD; // TODO Change
-
+  let password = req.body.password;
   if (password === process.env.PASSWORD) {
     res.json({ isLoggedin: true });
   } else {
