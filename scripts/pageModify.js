@@ -179,7 +179,7 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = filePath.split("/");
-        let navigationPath = previewImagePath[1];
+        let navigationPath = previewImagePath.slice(-1)[0];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
         console.log("1:",previewImagePath);
         console.log("2:",navigationPath);
@@ -320,7 +320,7 @@ class PageModify {
     return new Promise((resolve, reject) => {
       try {
         let previewImagePath = filePath.split("/");
-        let navigationPath = previewImagePath[1];
+        let navigationPath = previewImagePath.slice(-1)[0];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
 
         let imgPath = `pages/aktuelles/${navigationPath}`;

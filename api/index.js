@@ -2,8 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-const publicFilePrefix = "/public"
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
