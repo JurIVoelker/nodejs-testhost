@@ -170,7 +170,8 @@ class PageModify {
         console.log(previewImagePath);
         let navigationPath = previewImagePath[1];
         previewImagePath = `pages/aktuelles/${navigationPath}/preview.jpeg`;
-
+        log("[createPreview - previewImagePath]: ", previewImagePath);
+        
         let html = `
           <div class="card" data-location="${navigationPath}" onClick="navigate('aktuelles ${navigationPath} content')">
             <div class="image">
