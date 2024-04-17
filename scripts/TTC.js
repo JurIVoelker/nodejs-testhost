@@ -120,6 +120,7 @@ class TTC {
         return game;
       })
       .catch((error) => {
+        log.Error("[TTC.parseTeamRankings]:", err);
         console.error("Fehler beim Abrufen der HTML-Daten:", error);
         throw error; // Weiterwerfen, um den Fehler an den Aufrufer weiterzugeben
       });
@@ -196,7 +197,10 @@ class TTC {
           return response.text();
         })
         .then((html) => resolve(html))
-        .catch((error) => reject(error));
+        .catch((error) =>{ 
+          log.Error("[TTC.fetchHTML]:", err);
+          reject(error);
+        });
     });
   }
 

@@ -196,6 +196,7 @@
 
 #newsContent {
   max-width: 1400px;
+  width: 100%;
 }
 #newsContent .card-container {
   display: grid;

@@ -1,8 +1,16 @@
+/*
+ * Dependencies
+ */
+
 const fs = require("fs");
 const path = require("path");
 const log = require('node-file-logger');
 
-const options = {
+/*
+ * Logger
+ */
+
+const loggerOptions = {
   timeZone: 'Europe/Berlin',
   folderPath: path.join(__dirname, "..", "..", "logs") + "/",      
   dateBasedFileNaming: true,
@@ -19,13 +27,18 @@ const options = {
   onlyFileLogging: true
 }
 
-log.SetUserOptions(options);
+log.SetUserOptions(loggerOptions);
+
+/*
+ * 
+ */
 
 class PageModify {
   static loadPage(filePath, callback) {
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading the HTML file:", err);
+        log.Error("[PageModify.loadpage]:", err);
         callback(err, null);
       } else {
         callback(null, data);
@@ -42,6 +55,7 @@ class PageModify {
     fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
       if (err) {
         console.error("Fehler beim Lesen des Verzeichnisses:", err);
+        log.Error("[PageModify.getNthNewsPage]:", err);
         return;
       }
 
@@ -57,6 +71,7 @@ class PageModify {
         (err, data) => {
           if (err) {
             console.error("Error reading the HTML file:", err);
+            log.Error("[PageModify.getNthNewsPage]:", err);
             callback(err, null, directories.length);
           } else {
             callback(null, data, directories.length);
@@ -73,6 +88,7 @@ class PageModify {
     fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
       if (err) {
         console.error("Fehler beim Lesen des Verzeichnisses:", err);
+        log.Error("[PageModify.getPreviews]:", err);
         return;
       }
 
@@ -88,6 +104,7 @@ class PageModify {
         let fileEndIndex = itemsPerPage * (page + 1);
         directories = directories.slice(fileStartIndex, fileEndIndex);
       } catch (e) {
+        log.Error("[PageModify.getPreviews]:", e);
         callback(e, null, null);
       }
       this.nextFile(filePath, directories, [], callback, dirCount);
@@ -102,6 +119,7 @@ class PageModify {
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
         if (err) {
           console.error("Fehler beim Lesen des Verzeichnisses:", err);
+          log.Error("[PageModify.startPageArticlePreviews]:", err);
           return;
         }
 
@@ -125,6 +143,7 @@ class PageModify {
                 "utf8",
                 (err, data) => {
                   if (err) {
+                    log.Error("[PageModify.startPageArticlePreviews]:", err);
                     reject("Error reading the HTML file:", err);
                   } else {
                     resolve(data);
@@ -142,6 +161,7 @@ class PageModify {
             resolve(data);
           })
           .catch((err) => {
+            log.Error("[PageModify.startPageArticlePreviews]:", err);
             reject(err);
           });
       });
@@ -154,6 +174,7 @@ class PageModify {
     } else {
       fs.readFile(filePath + fileName[0] + "/preview.html", "utf8", (err, data) => {
         if (err) {
+          log.Error("[PageModify.nextFile]:", err);
           this.nextFile(
             filePath,
             fileName.slice(1),
@@ -204,6 +225,7 @@ class PageModify {
         this.writeFile(filePath, html, "/preview.html");
         resolve();
       } catch (e) {
+        log.Error("[PageModify.createPreview]:", e);
         reject(e);
       }
     });
@@ -241,6 +263,7 @@ class PageModify {
 
       fs.readdir(filePath, { withFileTypes: true }, (err, files) => {
         if (err) {
+          log.Error("[PageModify.createPreview]:", err);
           reject("Fehler beim Lesen des Verzeichnisses:", err);
         }
         console.log(filePath);
@@ -259,9 +282,15 @@ class PageModify {
         fs.mkdir(filePath + newDirectoryName, function (err) {
           if (err) {
             if (err.code == "EEXIST")
-              reject('Error while creating directory: "Dir already Exists"');
+              {
+                log.Error("[PageModify.createPreview]:", err);
+                reject('Error while creating directory: "Dir already Exists"');
+            }
             // Ignore the error if the folder already exists
-            else reject(err); // Something else went wrong
+            else {
+              log.Error("[PageModify.createPreview]:", err);
+              reject(err); 
+            } // Something else went wrong
           } else {
             let promises = [
               PageModify.createPreview(
@@ -290,6 +319,7 @@ class PageModify {
                 resolve(paths, newDirectoryName + "/preview.jpg");
               })
               .catch((err) => {
+                log.Error("[PageModify.createPreview]:", err);
                 reject(err);
               });
           }
@@ -301,6 +331,7 @@ class PageModify {
   static writeFile(filePath, htmlContent, fileName) {
     let fs = require("fs");
     fs.writeFile(filePath + fileName, htmlContent, (error) => {
+      log.Error("[PageModify.createPreview]:", error);
       console.log(error);
     });
   }
@@ -310,6 +341,7 @@ class PageModify {
     return new Promise((resolve, reject) => {
       const imageData = Buffer.from(fileData.split(";base64,").pop(), "base64");
       fs.writeFile(filePath, imageData, (err) => {
+        log.Error("[PageModify.saveImage]:", err);
         reject(err);
       });
       resolve("Image successfully saved as " + filePath + "!");
@@ -368,6 +400,7 @@ class PageModify {
         this.writeFile(filePath, htmlContent, "/content.html");
         resolve();
       } catch (e) {
+        log.Error("[PageModify.createPage]:", e);
         reject(e);
       }
     });
@@ -385,6 +418,7 @@ class PageModify {
         fs.rmSync(folderPath, { recursive: true, force: true });
         resolve();
       } catch (e) {
+        log.Error("[PageModify.deleteArticle]:", e);
         reject(e);
       }
     });
@@ -408,6 +442,7 @@ class PageModify {
     return new Promise((resolve, reject) => {
       this.loadPage(filePath + "/content.html", (err, data) => {
         if (err) {
+          log.Error("[PageModify.editArticle]:", err);
           reject(err);
         } else {
           const jsdom = require("jsdom");
@@ -478,6 +513,7 @@ class PageModify {
 
           resolve(imageNames);
         } else {
+          log.Error("[PageModify.getNextImages]:", err);
           reject(err);
         }
       });

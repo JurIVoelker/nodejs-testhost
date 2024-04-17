@@ -1,6 +1,9 @@
 .textWrap {
   padding: 40px;
   max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .textWrap #start-img-container img,
 .textWrap img {
@@ -24,10 +27,12 @@
     padding: 40px 0 40px 0;
   }
   .textWrap p {
-    padding: 20px 40px 0 40px;
+    width: 95%;
+    max-width: 1400px;
   }
   .textWrap h1 {
-    text-align: center;
+    width: 95%;
+    max-width: 1400px;
   }
 }
 
@@ -42,7 +47,7 @@
 }
 @media only screen and (max-width: 768px) {
   .training-schedule {
-    width: 90%;
+    width: 95%;
   }
   .training-schedule .day-of-week {
     width: 40%;

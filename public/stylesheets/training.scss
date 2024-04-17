@@ -2,6 +2,9 @@
 .textWrap {
   padding: 40px;
   max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   #start-img-container img,
   img {
@@ -20,11 +23,11 @@
   }
   @include size-s {
     p {
-      padding: 20px 40px 0 40px;
+      @include layout
     }
     padding: 40px 0 40px 0;
-    h1 {
-      text-align: center;
+    h1 {  
+      @include layout
     }
   }
 }
@@ -38,7 +41,7 @@
   @include box-shadow;
   border-radius: $border-radius;
   @include size-s {
-    width: 90%;
+    width: 95%;
 
     .day-of-week {
       width: 40%;

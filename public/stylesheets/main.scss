@@ -8,6 +8,10 @@ body {
   background-color: #fafafa;
 }
 
+a {
+  color: $link;
+}
+
 h1 {
   font-size: $header-size;
   line-height: $header-line-height;
@@ -256,4 +260,15 @@ footer {
 .basic-text {
   width: 95%;
   max-width: 1400px;
+}
+
+#authorizationWindowSubmit {
+  @include button;
+  min-width: 210px;
+  margin-right: 20px;
+}
+
+#authorizationWindowCancel {
+  @include button("outline");
+  min-width: 210px;
 }

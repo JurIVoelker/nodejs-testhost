@@ -10,6 +10,7 @@ app.use(
   })
 );
 
+
 // Create application/x-www-form-urlencoded parser
 const logger = require("morgan");
 app.use(logger("dev"));
@@ -17,7 +18,16 @@ app.use(logger("dev"));
 app.use(express.json());
 
 const path = require("path");
+
+
+/*
+ * Environmental Variables:
+ */
+
 require('dotenv').config({ path: path.join(__dirname, "..", ".env") });
+const serverPassword = process.env.PASSWORD || "test";
+
+
 //Scripts
 const PageModify = require("../scripts/pageModify.js");
 const TTC = require("../scripts/TTC.js");
@@ -54,6 +64,7 @@ app.get("/", (req, res) => {
           <link rel="stylesheet" href="/stylesheets/css/mannschaften.css"/>
           <link rel="stylesheet" href="/stylesheets/css/halle.css"/>
           <link rel="stylesheet" href="/stylesheets/css/naechste-spiele.css"/>
+          <link rel="stylesheet" href="/stylesheets/_global.css"/>
           <script src="/javascripts/js.js"></script>
           <script src="/javascripts/navigator.js"></script>
           <script src="/javascripts/cookieManager.js"></script>
@@ -185,8 +196,7 @@ app.post("/api/navigation/:id", (req, res) => {
 app.post("/api/login", (req, res) => {
   // API request for loading other pages
   let password = req.body.password;
-  res.json(process.env.PASSWORD);
-  if (password == process.env.PASSWORD) {
+  if (password == serverPassword) {
     res.json({ content: "Login erfolgreich", isLoggedin: "true" }); // Else: return HTML content to index.ejs
   } else {
     res.json({ content: "Login fehlgeschlagen", isLoggedin: "false" });
@@ -199,7 +209,7 @@ app.post("/api/login", (req, res) => {
 app.post("/api/authorize", (req, res) => {
   // API request for checking if is logged in
   let password = req.body.password;
-  if (password === process.env.PASSWORD) {
+  if (password === serverPassword) {
     res.json({ isLoggedin: true });
   } else {
     res.json({ isLoggedin: false });

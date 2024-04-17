@@ -7,6 +7,8 @@ $primary-hover: #5673a2;
 
 $primary-dark: #6b8dcb;
 
+$link: #516896;
+
 $secondary: #2c3966;
 
 $gray: #7c7c7c;
@@ -152,4 +154,22 @@ $z-index-alert-placeholder: 32;
       text-align: center;
     }
   }
+}
+
+@mixin layout($withImage: "false") {
+  @if $withImage == "false" {
+    width: 95%;
+    max-width: 1400px;
+  } 
+  @else {
+    width: 95%;
+    max-width: 1400px;
+    @include size-s {
+      width: 100% !important;
+    }
+  }
+}
+
+@mixin firstElement {
+  margin-top: 60px;
 }
