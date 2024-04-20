@@ -7,3 +7,5 @@ public/pages/aktuelles/*
 !public/pages/aktuelles/newPage.html
 push.cmd
 logs/*
+scripts/games.json
+scripts/allGames.json
