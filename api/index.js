@@ -459,7 +459,7 @@ app.post("/github-webhook", async (req, res) => {
   ) {
     res.status(400);
   }
-  res.status(200);
+  res.status(200).send("success");
 });
 
 app.use((req, res) => {
