@@ -1,4 +1,7 @@
-const host = window.location.hostname === "localhost" ? 'http://localhost:3000' : window.location.hostname;
+const host =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : `http://${window.location.hostname}`;
 
 // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
 window.onscroll = function () {
@@ -17,7 +20,6 @@ window.onscroll = function () {
 };
 
 window.onload = function () {
-  //loadNextGames(6);
   Server.initialize();
 };
 
@@ -89,7 +91,6 @@ function getNextGamesHTML(element) {
     "</td>" +
     "</tr>"
   );
-
 }
 
 function isElementVisible(el) {

@@ -465,4 +465,35 @@
 
 #authorizationWindow p {
   color: white;
+}
+
+#newsNavigation {
+  margin-top: 32px;
+  margin-bottom: 64px;
+  display: flex;
+  gap: 15px;
+}
+#newsNavigation button {
+  height: 50px;
+  border-radius: 10px;
+  background-color: #6b8dcb;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+}
+#newsNavigation button:hover {
+  cursor: pointer;
+}
+#newsNavigation button img {
+  height: 40px;
+  width: 40px;
+}
+#newsNavigation button[disabled] {
+  background-color: gray;
 }/*# sourceMappingURL=aktuelles.css.map */
