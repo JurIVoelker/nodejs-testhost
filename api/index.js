@@ -450,8 +450,15 @@ app.get("/api/getMail", (req, res) => {
   }
 });
 
-app.post("/api/github-webhook", (req, res) => {
-  log.Info(req);
+// Route to handle GitHub webhook
+app.post("/github-webhook", async (req, res) => {
+  const payload = JSON.stringify(req.body);
+  if (
+    !payload |
+    (!payload?.repository?.full_name === "JurIVoelker/nodejs-testhost")
+  ) {
+    res.status(400);
+  }
   res.status(200);
 });
 
