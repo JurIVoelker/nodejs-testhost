@@ -2,6 +2,29 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+const log = require("node-file-logger");
+
+/*
+ * Logger
+ */
+
+const loggerOptions = {
+  timeZone: "Europe/Berlin",
+  folderPath: path.join(__dirname, "..", "..", "logs") + "/",
+  dateBasedFileNaming: true,
+  // Required only if dateBasedFileNaming is set to false
+  fileName: "All_Logs",
+  // Required only if dateBasedFileNaming is set to true
+  fileNamePrefix: "Logs_",
+  fileNameSuffix: "",
+  fileNameExtension: ".log",
+
+  dateFormat: "YYYY-MM-DD",
+  timeFormat: "HH:mm:ss.SSS",
+  logLevel: "debug",
+  onlyFileLogging: true,
+};
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -9,7 +32,6 @@ app.use(
     extended: true,
   })
 );
-
 
 // Create application/x-www-form-urlencoded parser
 const logger = require("morgan");
@@ -19,14 +41,12 @@ app.use(express.json());
 
 const path = require("path");
 
-
 /*
  * Environmental Variables:
  */
 
-require('dotenv').config({ path: path.join(__dirname, "..", ".env") });
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const serverPassword = process.env.PASSWORD || "test";
-
 
 //Scripts
 const PageModify = require("../scripts/pageModify.js");
@@ -430,16 +450,25 @@ app.get("/api/getMail", (req, res) => {
   }
 });
 
+app.post("/api/github-webhook", (req, res) => {
+  log.Info(req);
+});
+
 app.use((req, res) => {
-  const filePath = (path.join(__dirname, "..", "public", ...req.path.split("/")));
-  const error404 = (path.join(__dirname, "..", "public", "pages", "error404.html"));
+  const filePath = path.join(__dirname, "..", "public", ...req.path.split("/"));
+  const error404 = path.join(
+    __dirname,
+    "..",
+    "public",
+    "pages",
+    "error404.html"
+  );
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
     res.status(404).sendFile(error404);
   }
 });
-
 
 app.listen(3000, () => console.log("Server ready on port 3000."));
 
