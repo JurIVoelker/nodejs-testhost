@@ -2,6 +2,22 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+  })
+);
+
+// Create application/x-www-form-urlencoded parser
+const logger = require("morgan");
+app.use(logger("dev"));
+
+app.use(express.json());
+
+const path = require("path");
+
 const log = require("node-file-logger");
 
 /*
@@ -24,22 +40,6 @@ const loggerOptions = {
   logLevel: "debug",
   onlyFileLogging: true,
 };
-
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-  })
-);
-
-// Create application/x-www-form-urlencoded parser
-const logger = require("morgan");
-app.use(logger("dev"));
-
-app.use(express.json());
-
-const path = require("path");
 
 /*
  * Environmental Variables:
