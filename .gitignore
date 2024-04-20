@@ -9,3 +9,4 @@ push.cmd
 logs/*
 scripts/games.json
 scripts/allGames.json
+api/logs/*
