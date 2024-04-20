@@ -461,14 +461,6 @@ app.post("/api/github-webhook", async (req, res) => {
     res.status(400);
   }
   exec("git reset --hard", (err, stdout, stderr) => {
-    if (err) {
-      console.error(`Error executing git reset --hard: ${err}`);
-      res.status(500).send("Error executing git reset --hard");
-      return;
-    }
-
-    console.log("Git reset --hard executed successfully.");
-
     // Execute git pull
     exec("git pull", (err, stdout, stderr) => {
       if (err) {
@@ -490,7 +482,7 @@ app.post("/api/github-webhook", async (req, res) => {
         console.log("pm2 reload all executed successfully.");
 
         // Respond with success message
-        res.send("Commands executed successfully.");
+        res.status(200).send("Commands executed successfully.");
       });
     });
   });
