@@ -36,6 +36,7 @@
   }
   #startText img {
     border-radius: 0 !important;
+    height: 300px !important;
   }
 }
 

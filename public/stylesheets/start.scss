@@ -3,7 +3,7 @@
 #startText {
   @include firstElement;
   @include layout("true");
-  
+
   height: 460px;
   display: flex;
   justify-content: space-around;
@@ -32,6 +32,7 @@
     }
     img {
       border-radius: 0 !important;
+      height: 300px !important;
     }
   }
 }
