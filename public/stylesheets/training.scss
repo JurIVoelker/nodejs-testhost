@@ -2,9 +2,12 @@
 .textWrap {
   padding: 40px;
   max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include size-s {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
   #start-img-container img,
   img {
@@ -23,11 +26,11 @@
   }
   @include size-s {
     p {
-      @include layout
+      @include layout;
     }
     padding: 40px 0 40px 0;
-    h1 {  
-      @include layout
+    h1 {
+      @include layout;
     }
   }
 }

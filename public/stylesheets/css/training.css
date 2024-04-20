@@ -1,9 +1,14 @@
 .textWrap {
   padding: 40px;
   max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .textWrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .textWrap #start-img-container img,
 .textWrap img {
