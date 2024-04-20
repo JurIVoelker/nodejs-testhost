@@ -113,9 +113,6 @@ function navigate(page) {
             Server.getNextImages(images.length);
           }
           break;
-        case "anderes kontakt":
-          Server.insertEmails();
-          break;
       }
     }
   );
@@ -172,9 +169,6 @@ class Server {
         if (images !== null) {
           Server.getNextImages(images.length);
         }
-        break;
-      case "anderes/kontakt":
-        Server.insertEmails();
         break;
     }
 
@@ -558,30 +552,6 @@ class Server {
             images +
             "</div></div>";
         } else {
-          let col1 = "";
-          let col2 = "";
-          let col3 = "";
-
-          for (let i = 0; i < imagesPc["col1"].length; i++) {
-            col1 += imagesPc["col1"][i];
-          }
-          for (let i = 0; i < imagesPc["col2"].length; i++) {
-            col2 += imagesPc["col2"][i];
-          }
-          for (let i = 0; i < imagesPc["col3"].length; i++) {
-            col3 += imagesPc["col3"][i];
-          }
-
-          document.getElementById("imgBox").innerHTML =
-            "<div class='col'>" +
-            col1 +
-            "</div>" +
-            "<div class='col'>" +
-            col2 +
-            "</div>" +
-            "<div class='col'>" +
-            col3 +
-            "</div>";
         }
         _requestSent = false;
       })
@@ -610,21 +580,6 @@ class Server {
         }, 5000);
       })
       .catch((error) => console.error("Fehler:", error)); // If an error occured while fetching, return error
-  }
-
-  static setMail(mailto) {
-    getRequest(`/getMail?mail=${mailto}`)
-      .then((data) => {
-        document.getElementById(mailto).innerHTML = mailto + ": " + data;
-      })
-      .catch((error) => console.error("Fehler:", error)); // If an error occured while fetching, return error
-  }
-
-  static insertEmails() {
-    let mailList = ["Vorstand", "Sportwart", "Jugendwart"];
-    for (let i = 0; i < mailList.length; i++) {
-      this.setMail(mailList[i]);
-    }
   }
 }
 
