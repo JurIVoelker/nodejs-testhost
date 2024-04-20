@@ -452,6 +452,7 @@ app.get("/api/getMail", (req, res) => {
 
 app.post("/api/github-webhook", (req, res) => {
   log.Info(req);
+  res.status(200);
 });
 
 app.use((req, res) => {
