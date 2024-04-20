@@ -451,7 +451,7 @@ app.get("/api/getMail", (req, res) => {
 });
 
 // Route to handle GitHub webhook
-app.post("/github-webhook", async (req, res) => {
+app.post("/api/github-webhook", async (req, res) => {
   const payload = JSON.stringify(req.body);
   if (
     !payload |
