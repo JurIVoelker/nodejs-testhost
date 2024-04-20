@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const { exec } = require("child_process");
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -459,7 +460,40 @@ app.post("/api/github-webhook", async (req, res) => {
   ) {
     res.status(400);
   }
-  res.status(200).send("success");
+  exec("git reset --hard", (err, stdout, stderr) => {
+    if (err) {
+      console.error(`Error executing git reset --hard: ${err}`);
+      res.status(500).send("Error executing git reset --hard");
+      return;
+    }
+
+    console.log("Git reset --hard executed successfully.");
+
+    // Execute git pull
+    exec("git pull", (err, stdout, stderr) => {
+      if (err) {
+        console.error(`Error executing git pull: ${err}`);
+        res.status(500).send("Error executing git pull");
+        return;
+      }
+
+      console.log("Git pull executed successfully.");
+
+      // Execute pm2 reload all
+      exec("pm2 reload all", (err, stdout, stderr) => {
+        if (err) {
+          console.error(`Error executing pm2 reload all: ${err}`);
+          res.status(500).send("Error executing pm2 reload all");
+          return;
+        }
+
+        console.log("pm2 reload all executed successfully.");
+
+        // Respond with success message
+        res.send("Commands executed successfully.");
+      });
+    });
+  });
 });
 
 app.use((req, res) => {
