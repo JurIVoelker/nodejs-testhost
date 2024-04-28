@@ -110,7 +110,7 @@ function navigate(page) {
         case "galerie galerie":
           let images = document.querySelectorAll("#pageContent img");
           if (images !== null) {
-            Server.getNextImages(images.length);
+            Server.getImages();
           }
           break;
       }
@@ -167,7 +167,7 @@ class Server {
       case "galerie/galerie":
         let images = document.querySelectorAll("#pageContent img");
         if (images !== null) {
-          Server.getNextImages(images.length);
+          Server.getImages();
         }
         break;
     }
@@ -515,45 +515,11 @@ class Server {
       .catch((error) => console.error("Fehler:", error)); // If an error occurred while fetching
   }
 
-  static getNextImages(imgCount) {
-    getRequest(`/nextImages?c=${imgCount}`)
+  static getImages() {
+    getRequest(`/gallery`)
       .then((res) => {
-        let imagesPc = JSON.parse(Client.loadLocalStorage("imagesPc"));
-        let imagesMobile = JSON.parse(Client.loadLocalStorage("imagesMobile"));
-
-        for (let i = 0; i < res.imageNames.length; i++) {
-          if (i % 3 === 0) {
-            imagesPc["col1"].push('<img src="' + res.imageNames[i] + '">');
-          } else if (i % 3 === 1) {
-            imagesPc["col2"].push('<img src="' + res.imageNames[i] + '">');
-          } else {
-            imagesPc["col3"].push('<img src="' + res.imageNames[i] + '">');
-          }
-          imagesMobile["images"].push('<img src="' + res.imageNames[i] + '">');
-        }
-
-        Client.saveLocalStorage("imagesPc", JSON.stringify(imagesPc));
-        Client.saveLocalStorage("imagesMobile", JSON.stringify(imagesMobile));
-
-        if (
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-          ) ||
-          true
-        ) {
-          let images = "";
-
-          for (let i = 0; i < imagesMobile["images"].length; i++) {
-            images += imagesMobile["images"][i];
-          }
-
-          document.getElementById("imgBox").innerHTML =
-            "<div id='mobileImageBox'><div class='col'>" +
-            images +
-            "</div></div>";
-        } else {
-        }
-        _requestSent = false;
+        const galerie = document.getElementById("galerie");
+        galerie.innerHTML = res.data;
       })
       .catch((err) => {
         console.log("Error", err);

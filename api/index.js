@@ -418,16 +418,32 @@ app.post("/api/editPage" /*, upload.single('image')*/, (req, res) => {
  * Get Images for gallery
  */
 
-app.get("/api/nextImages", (req, res) => {
-  let imgCount = req.query.c;
-
-  PageModify.getNextImages(imgCount)
-    .then((data) => {
-      res.json({ imageNames: data });
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
+app.get("/api/gallery", (req, res) => {
+  const directoryPath =
+    path.join(__dirname, "..", "public", "pages", "galerie", "images") + "/";
+  let files = fs.readdirSync(directoryPath);
+  files = files.map((file) => {
+    return `<img src="pages/galerie/images/${file}" loading="lazy" alt="Allgemeine Bilder von Events und Spielen vom TTC Klingenmünster"/>`;
+  });
+  let cols = { col1: [], col2: [], col3: [] };
+  for (let i = 0; i < files.length; i++) {
+    if (i % 3 === 0) {
+      cols.col1.push(files[i]);
+    } else if (i % 3 === 1) {
+      cols.col2.push(files[i]);
+    } else {
+      cols.col3.push(files[i]);
+    }
+  }
+  res.json({
+    data: `
+  <div id="imgBox" style="margin-top: 60px">
+    <div>${cols.col1.join("")}</div>
+    <div>${cols.col2.join("")}</div>
+    <div>${cols.col3.join("")}</div>
+  </div>
+`,
+  });
 });
 
 /**
