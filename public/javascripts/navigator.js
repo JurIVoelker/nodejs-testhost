@@ -8,7 +8,7 @@ let _requestSent = false;
 
 const getRequest = (path) => {
   return new Promise((resolve, reject) => {
-    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`, {
+    fetch(`/api${path[0] != "/" ? "/" + path : path}`, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -23,7 +23,7 @@ const getRequest = (path) => {
 
 const postRequest = (path, body) => {
   return new Promise((resolve, reject) => {
-    fetch(`${host}/api${path[0] != "/" ? "/" + path : path}`, {
+    fetch(`/api${path[0] != "/" ? "/" + path : path}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -186,7 +186,7 @@ class Server {
     if (password === "") {
       return;
     }
-    fetch(host + "/api/authorize", {
+    fetch("/api/authorize", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -797,7 +797,7 @@ class Client {
   }
 
   static returnToArticles() {
-    location.href = host + "/?page=aktuelles/aktuelles";
+    location.href = "/?page=aktuelles/aktuelles";
   }
 
   static triggerFileInput() {
