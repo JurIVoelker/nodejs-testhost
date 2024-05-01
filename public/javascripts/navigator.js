@@ -1033,5 +1033,5 @@ class Ui {
 window.addEventListener("popstate", function (event) {
   const urlParams = new URLSearchParams(window.location.search);
   const page = urlParams.get("page");
-  navigate(page.replace("/", " "));
+  navigate(!page ? "start start" : page.replace("/", " "));
 });

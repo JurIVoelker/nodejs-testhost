@@ -1,8 +1,3 @@
-/*const host =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : `https://${window.location.hostname}`;*/
-
 // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
 window.onscroll = function () {
   if (!_requestSent && _currentPage === "galerie/galerie") {
