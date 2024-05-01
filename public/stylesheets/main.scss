@@ -48,6 +48,10 @@ input {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  min-height: calc(100vh - 1200px);
+  @include size-s {
+    min-height: calc(100vh - 825px);
+  }
 }
 
 #banner {

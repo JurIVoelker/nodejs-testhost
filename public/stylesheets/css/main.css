@@ -116,9 +116,9 @@
 
 #articles {
   padding-top: 40px;
-  padding-bottom: 80px;
   max-width: 1400px;
   width: 100%;
+  padding-bottom: 24px;
 }
 @media only screen and (max-width: 768px) {
   #articles h2 {
@@ -165,6 +165,22 @@
 }
 #articles .card-container .card .content .text {
   color: rgb(107, 105, 124);
+}
+
+.show-more-articles {
+  height: 50px;
+  border-radius: 10px;
+  background-color: #6b8dcb;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+  text-decoration: underline;
+  padding: 0 20px 0 20px;
+  margin-bottom: 80px;
+}
+.show-more-articles:hover {
+  cursor: pointer;
 }
 
 #nextGames {
@@ -304,6 +320,12 @@ input {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  min-height: calc(100vh - 1200px);
+}
+@media only screen and (max-width: 768px) {
+  #pageContent {
+    min-height: calc(100vh - 825px);
+  }
 }
 
 #banner {
